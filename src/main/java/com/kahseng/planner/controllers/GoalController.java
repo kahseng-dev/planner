@@ -2,6 +2,7 @@ package com.kahseng.planner.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +18,8 @@ import com.kahseng.planner.services.GoalService;
 @RequestMapping("/goals")
 public class GoalController {
 
-    private final GoalService goalService;
-
-    public GoalController(GoalService goalService) {
-        this.goalService = goalService;
-    }
+    @Autowired
+    private GoalService goalService;
 
     @GetMapping
     public String getGoals(Model model) {
