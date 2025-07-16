@@ -2,6 +2,7 @@ package com.kahseng.planner.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kahseng.planner.models.Task;
@@ -10,11 +11,8 @@ import com.kahseng.planner.repositories.TaskRepository;
 @Service
 public class TaskService {
 
-    private final TaskRepository taskRepository;
-
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
+    @Autowired
+    private TaskRepository taskRepository;
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
