@@ -30,6 +30,13 @@ public class TaskController {
         return "board";
     }
 
+    @GetMapping("/goal/{id}")
+    public String getTasksByGoal(@PathVariable Long id, Model model) {
+        List<Task> tasks = taskService.getAllTasksByGoalId(id);
+        model.addAttribute("tasks", tasks);
+        return "redirect:/board";
+    }
+
     @PostMapping
     public String createTask(@RequestParam String title) {
         taskService.createTask(title);

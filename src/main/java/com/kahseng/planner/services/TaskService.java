@@ -20,6 +20,10 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public List<Task> getAllTasksByGoalId(Long id) {
+        return taskRepository.findByGoalId(id);
+    }
+
     public void createTask(String title) {
         Task task = new Task();
         task.setTitle(title);
