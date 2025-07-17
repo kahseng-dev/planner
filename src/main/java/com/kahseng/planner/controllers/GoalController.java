@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class GoalController {
     }
 
     @PutMapping("/{id}/replace/{title}")
-    public void replaceGoalTitle(@RequestParam Long id, @RequestParam String title) {
+    public void replaceGoalTitle(@PathVariable Long id, @PathVariable String title) {
         goalService.replaceGoalTitle(id, title);
     }
 }
