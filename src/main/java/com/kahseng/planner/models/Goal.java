@@ -1,7 +1,8 @@
 package com.kahseng.planner.models;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,16 +22,17 @@ public class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String title;
-    private LocalDateTime createdDateTime;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    private String title;
+    private LocalDateTime createdDateTime;
     
     @OneToMany(mappedBy = "goal",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private Set<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
 }
