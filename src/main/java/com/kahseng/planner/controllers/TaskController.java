@@ -3,53 +3,41 @@ package com.kahseng.planner.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.kahseng.planner.models.Task;
 import com.kahseng.planner.services.TaskService;
 
-@Controller
-@RequestMapping("/tasks")
+@RestController
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     @Autowired
     private TaskService taskService;
 
-    @GetMapping
-    public String getTasks(Model model) {
-        List<Task> tasks = taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
-        return "board";
-    }
-
     @GetMapping("/goal/{id}")
-    public String getTasksByGoal(@PathVariable Long id, Model model) {
-        List<Task> tasks = taskService.getAllTasksByGoalId(id);
-        model.addAttribute("tasks", tasks);
-        return "redirect:/board";
+    public List<Task> getTasksByGoal(@PathVariable Long id) {
+        return taskService.getTasksByGoalId(id);
     }
 
-    @PostMapping
-    public String createTask(@RequestParam String title) {
-        taskService.createTask(title);
-        return "redirect:/board";
+    @PostMapping("/create")
+    public void createTask(@RequestParam Long goalId, @RequestParam String text) {
+        taskService.createTask(goalId, text);
     }
 
-    @GetMapping("/{id}/delete")
-    public String deleteTask(@PathVariable Long id) {
+    @PostMapping("/delete")
+    public void deleteTask(@RequestParam Long id) {
         taskService.deleteTask(id);
-        return "redirect:/board";
     }
 
-    @GetMapping("/{id}/toggle")
-    public String toggleTask(@PathVariable Long id) {
+    @PutMapping("/toggle/{id}")
+    public void toggleTask(@PathVariable Long id) {
         taskService.toggleTask(id);
-        return "redirect:/board";
     }
 }
