@@ -1,4 +1,8 @@
+import { IconCircleCheck, IconCircleCheckFilled } from '@tabler/icons-react'
+import { useEffect, useState } from "react"
+
 import type { Goal } from "../types/Goal"
+import type { Task } from "../types/Task"
 
 interface GoalListProps {
     goal:Goal,
@@ -6,28 +10,58 @@ interface GoalListProps {
 }
 
 const GoalList = ({ goal }:GoalListProps) => {
+
+    const [ tasks, setTasks ] = useState<Task[]>(goal.tasks)
+    const [ isGoalCompleted, setIsGoalCompleted ] = useState(false)
+    
+    const updateGoalIsCompleted = () => {
+        let isCompleted = true
+
+        tasks.map(task => {
+            if (!task.isCompleted) return isCompleted = false
+        })
+
+        setIsGoalCompleted(isCompleted)
+    }
+
+    const handleToggleTask = (id:number) => {
+        setTasks(tasks.map(task => task.id !== id ?
+                { ...task }
+                :
+                { ...task, isCompleted: !task.isCompleted }
+            )
+        )
+    }
+
+    useEffect(() => {
+        updateGoalIsCompleted()
+    }, [tasks])
+
     return (
         <div className="text-sm flex flex-col gap-2">
-            <label 
-                htmlFor={goal.title} 
-                className="px-2 flex gap-2 text-neutral-500 cursor-pointer rounded transition duration-300 break-all select-none hover:bg-gray-200 has-checked:text-neutral-400 has-checked:line-through">
-                <input 
-                    type="checkbox" 
-                    id={goal.title} 
-                    value={goal.title} />
-                {goal.title}
-            </label>
+            <div className="py-1 px-2 flex items-start gap-2 cursor-pointer rounded transition duration-300 select-none hover:bg-gray-100">
+                <p>
+                    { isGoalCompleted ? 
+                        <IconCircleCheckFilled className="mt-0.5 size-4 fill-green-600" />
+                        :
+                        <IconCircleCheck className="mt-0.5 size-4 stroke-neutral-400" /> 
+                    }
+                </p>
+                <p className={`${isGoalCompleted && "text-neutral-400 line-through"} text-neutral-500 break-all`}>{goal.title}</p>
+            </div>
             <div className="pl-5 w-full flex flex-col gap-2">
-                { goal.tasks.map((task, index) => 
+                { tasks.map(task => 
                     <label 
-                        key={index}
-                        htmlFor={task.text} 
-                        className="px-2 flex gap-2 text-neutral-500 cursor-pointer rounded transition duration-300 break-all select-none hover:bg-gray-200 has-checked:text-neutral-400 has-checked:line-through">
+                        key={task.id}
+                        htmlFor={`task[${task.id}]`} 
+                        className="py-1 px-2 flex items-baseline gap-2 text-neutral-500 cursor-pointer rounded transition duration-300 break-all select-none hover:bg-gray-100 has-checked:text-neutral-400 has-checked:line-through">
                         <input 
+                            onChange={() => handleToggleTask(task.id)}
                             type="checkbox" 
-                            id={task.text} 
+                            id={`task[${task.id}]`} 
                             value={task.text}
-                            checked={task.isCompleted} />
+                            checked={task.isCompleted}
+                            className="cursor-pointer" />
                         {task.text}
                     </label>
                 )}
