@@ -31,7 +31,6 @@ public class UserService {
         userResponse.setName(savedUser.getName());
         userResponse.setEmail(savedUser.getEmail());
         userResponse.setPassword(savedUser.getPassword());
-        userResponse.setGoals(savedUser.getGoals());
 
         return userResponse;
     }
@@ -45,7 +44,6 @@ public class UserService {
         userResponse.setName(user.getName());
         userResponse.setEmail(user.getEmail());
         userResponse.setPassword(user.getPassword());
-        userResponse.setGoals(user.getGoals());
 
         return userResponse;
     }

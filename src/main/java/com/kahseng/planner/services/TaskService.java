@@ -2,30 +2,36 @@ package com.kahseng.planner.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kahseng.planner.models.Goal;
 import com.kahseng.planner.models.Task;
+import com.kahseng.planner.repositories.GoalRepository;
 import com.kahseng.planner.repositories.TaskRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class TaskService {
 
-    @Autowired
     private TaskRepository taskRepository;
+    private GoalRepository goalRepository;
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
-
-    public List<Task> getAllTasksByGoalId(Long id) {
+    public List<Task> getTasksByGoalId(Long id) {
         return taskRepository.findByGoalId(id);
     }
 
-    public void createTask(String title) {
+    public void createTask(Long goalId, String text) {
         Task task = new Task();
-        task.setTitle(title);
+
+        Goal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Goal Id"));
+        
+        task.setText(text);
         task.setCompleted(false);
+        task.setGoal(goal);
+
         taskRepository.save(task);
     }
 
