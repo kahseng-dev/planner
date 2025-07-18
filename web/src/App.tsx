@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router"
 
-import BoardPage from "./pages/Board"
+import Board from "./pages/board"
 import Button from "./components/button"
 
 const App = () => {
@@ -27,7 +27,7 @@ const App = () => {
         </div>
         :
         <Routes>
-          <Route path="/board" element={<BoardPage/>} />
+          <Route path="/board" element={<Board />} />
           <Route path="/" element={isLoading ? <Navigate to="/board" replace /> : <div>Login</div>} />
         </Routes>
       }
