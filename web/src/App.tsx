@@ -28,7 +28,7 @@ const App = () => {
         :
         <Routes>
           <Route path="/board" element={<Board />} />
-          <Route path="/" element={isLoading ? <Navigate to="/board" replace /> : <div>Login</div>} />
+          <Route index element={<Navigate to="/board" replace />} />
         </Routes>
       }
     </Router>
