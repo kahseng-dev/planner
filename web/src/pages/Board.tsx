@@ -5,62 +5,30 @@ import Tag from "../components/tag"
 import Button from "../components/button"
 import GoalList from "../components/goal-list"
 
+import { data } from "../tests/data"
 import { useHorizontalScroll } from "../utils/useHorizontalScroll"
+import Plus from "../assets/icons/plus.svg"
 
 import type { Goal } from "../types/Goal"
-
-import { data } from "../tests/data"
 
 const Board = () => {
 
     const today = DateTime.local()
     
     const [ goals, setGoals ] = useState<Goal[]>([])
-    const [ periods, setPeriods ] = useState<string[]>(["test"])
     const [ timelineOption, setTimelineOption ] = useState("Year")
-
-    const [ firstDayOfActiveMonth, setFirstDayOfActiveMonth ] = useState(
-        today.startOf("month")
-    )
+    const [ firstDayOfActiveMonth, setFirstDayOfActiveMonth ] = useState(today.startOf("month"))
 
     const daysOfMonth = Interval.fromDateTimes(
         firstDayOfActiveMonth.startOf("month"), 
         firstDayOfActiveMonth.endOf("month")
-    ).splitBy({day: 1}).map(day => day.start)
+    ).splitBy({ day: 1 }).map(day => day.start)
 
-    const timelineOptions = ["Day", "Week", "Month", "Year" ]
+    const timelineOptions = [ "Day", "Week", "Month", "Year" ]
     const horizontalScrollRef = useHorizontalScroll()
-    
-    const generatePeriods = (option:string) => {
-        let results:string[] = []
-
-        switch(option) {
-            case "Year":
-
-                break
-
-            case "Month":
-
-                break
-
-            case "Week":
-
-                break
-                
-            case "Day":
-
-                break
-                
-            default:
-                break
-        }
-
-        setPeriods(results)
-    }
 
     const handleChangeTimeline = (option:string) => {
         setTimelineOption(option)
-        generatePeriods(option)
     }
 
     useEffect(() => {
@@ -86,19 +54,24 @@ const Board = () => {
                 { daysOfMonth.map((dayOfMonth, index) => (
                     <div 
                         key={index}
-                        className="p-4 min-w-1/4 border-r border-gray-200">
+                        className="group/goal p-4 min-w-1/4 border-r border-gray-200">
                         <div className="flex items-center gap-2 mb-2">
                             <p className="text-neutral-800">{`${dayOfMonth?.day} ${firstDayOfActiveMonth.monthLong}`}</p>
                             { dayOfMonth?.toISODate() === today.toISODate() && <Tag text="today" /> }
                         </div>
                         <div className="flex flex-col gap-4">
                             { goals.map(goal => {
+                                
                                 let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
 
                                 if (createdDateTime.toISODate() == dayOfMonth?.toISODate()) {
                                     return <GoalList key={goal.id} goal={goal} />
                                 }
                             })}
+                            <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
+                                <img className="size-4" src={Plus} alt="plus" />
+                                Add goal
+                            </Button>
                         </div>
                     </div>
                 ))}
@@ -108,20 +81,3 @@ const Board = () => {
 }
 
 export default Board
-
-            /*
-            <div className="flex h-full">
-                { periods.map(period => 
-                    <div 
-                        key={period}
-                        className="w-1/4 p-4 border-r border-gray-200">
-                        <p className="text-neutral-800 mb-2">{period}</p>
-                        <div className="flex flex-col gap-4">
-                            { goals.map(goal => {
-                                return <GoalList key={goal.id} goal={goal} />
-                            })}
-                        </div>
-                    </div>
-                )}
-            </div>
-            */

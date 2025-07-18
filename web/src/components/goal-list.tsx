@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 
 import CircleCheck from "../assets/icons/circle-check.svg"
 import CircleCheckFilled from "../assets/icons/circle-check-filled.svg"
+import Plus from "../assets/icons/plus.svg"
+import Button from "../components/button"
 
 import type { Goal } from "../types/Goal"
 import type { Task } from "../types/Task"
@@ -49,7 +51,7 @@ const GoalList = ({ goal }:GoalListProps) => {
                 }
                 <p className={`${isGoalCompleted && "text-neutral-400 line-through"} text-neutral-500 break-all`}>{goal.title}</p>
             </div>
-            <div className="pl-5 w-full flex flex-col gap-2">
+            <div className="group/task pl-5 w-full flex flex-col gap-2">
                 { tasks.map(task => 
                     <label 
                         key={task.id}
@@ -65,6 +67,10 @@ const GoalList = ({ goal }:GoalListProps) => {
                         {task.text}
                     </label>
                 )}
+                <Button className="opacity-0 group-hover/task:opacity-100 w-full flex items-center gap-2">
+                    <img className="size-4" src={Plus} alt="plus" />
+                    Add task
+                </Button>
             </div>
         </div>
     )
