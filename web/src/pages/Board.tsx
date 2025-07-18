@@ -54,7 +54,7 @@ const Board = () => {
                 { daysOfMonth.map((dayOfMonth, index) => (
                     <div 
                         key={index}
-                        className="group/goal p-4 min-w-1/4 border-r border-gray-200">
+                        className="group/goal p-4 min-w-1/3 border-r border-gray-200">
                         <div className="flex items-center gap-2 mb-2">
                             <p className="text-neutral-800">{`${dayOfMonth?.day} ${firstDayOfActiveMonth.monthLong}`}</p>
                             { dayOfMonth?.toISODate() === today.toISODate() && <Tag text="today" /> }
