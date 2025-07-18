@@ -12,7 +12,7 @@ export const data = [
     {
         id: 2,
         title: "THIS IS A LONGGGGGGGGGGGGGGGGGGGGGGGGGGG goal title 2",
-        createdDateTime: new Date(),
+        createdDateTime: new Date('2025-07-10T00:00:00'),
         tasks: [
             {
                 id: 2,
@@ -29,7 +29,7 @@ export const data = [
     {
         id: 3,
         title: "Run a 5k race",
-        createdDateTime: new Date(),
+        createdDateTime: new Date('2025-07-14T00:00:00'),
         tasks: [
             {
                 id: 4,
