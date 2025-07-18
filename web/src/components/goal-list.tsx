@@ -1,5 +1,7 @@
-import { IconCircleCheck, IconCircleCheckFilled } from '@tabler/icons-react'
 import { useEffect, useState } from "react"
+
+import CircleCheck from "../assets/icons/circle-check.svg"
+import CircleCheckFilled from "../assets/icons/circle-check-filled.svg"
 
 import type { Goal } from "../types/Goal"
 import type { Task } from "../types/Task"
@@ -40,13 +42,11 @@ const GoalList = ({ goal }:GoalListProps) => {
     return (
         <div className="text-sm flex flex-col gap-2">
             <div className="py-1 px-2 flex items-start gap-2 cursor-pointer rounded transition duration-300 select-none hover:bg-gray-100">
-                <p>
-                    { isGoalCompleted ? 
-                        <IconCircleCheckFilled className="mt-0.5 size-4 fill-green-600" />
-                        :
-                        <IconCircleCheck className="mt-0.5 size-4 stroke-neutral-400" /> 
-                    }
-                </p>
+                { isGoalCompleted ? 
+                    <img className="mt-0.5 size-4" src={CircleCheckFilled} alt="circle-check-filled" />
+                    :
+                    <img className="mt-0.5 size-4" src={CircleCheck} alt="circle-check" />
+                }
                 <p className={`${isGoalCompleted && "text-neutral-400 line-through"} text-neutral-500 break-all`}>{goal.title}</p>
             </div>
             <div className="pl-5 w-full flex flex-col gap-2">
