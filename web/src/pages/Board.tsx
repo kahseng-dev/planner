@@ -23,7 +23,7 @@ const BoardPage = () => {
     }, [])
 
     return <>
-        <div className="flex-col h-screen">
+        <div className="flex flex-col h-screen">
             <div className="flex justify-end gap-2 p-4 border-b border-gray-200">
                 { timeframeOptions.map(option => 
                     <Button 
@@ -34,7 +34,7 @@ const BoardPage = () => {
                     </Button>
                 )}
             </div>
-            <div className="w-1/4 p-4 border-r border-gray-200">
+            <div className="h-full w-1/4 p-4 border-r border-gray-200">
                 <p className="text-neutral-800 mb-2">{2025}</p>
                 <div className="flex flex-col gap-4">
                     { goals.map((goal, index) =>
