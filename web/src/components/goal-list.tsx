@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 
-import CircleCheck from "../assets/icons/circle-check.svg"
-import CircleCheckFilled from "../assets/icons/circle-check-filled.svg"
-import Plus from "../assets/icons/plus.svg"
-import X from "../assets/icons/x.svg"
+import CircleCheck from "@assets/icons/circle-check.svg"
+import CircleCheckFilled from "@assets/icons/circle-check-filled.svg"
+import Plus from "@assets/icons/plus.svg"
+import X from "@assets/icons/x.svg"
 
-import Button from "../components/button"
+import Button from "@components/button"
 
-import type { Goal } from "../types/Goal"
-import type { Task } from "../types/Task"
+import type { Goal } from "@/types/Goal"
+import type { Task } from "@/types/Task"
 
 interface GoalListProps {
     goal:Goal,

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router"
 
-import Board from "./pages/board"
-import Button from "./components/button"
+import Board from "@/pages/Board"
+import Button from "@components/button"
 
 const App = () => {
   const [ isLoading, setIsLoading ] = useState(false)

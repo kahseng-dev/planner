@@ -1,12 +1,12 @@
 import { DateTime, Interval } from "luxon"
 
-import Tag from "../../../components/tag"
-import Button from "../../../components/button"
-import GoalList from "../../../components/goal-list"
-import Plus from "../../../assets/icons/plus.svg"
-import { useHorizontalScroll } from "../../../utils/useHorizontalScroll"
+import Tag from "@components/tag"
+import Button from "@components/button"
+import GoalList from "@components/goal-list"
+import Plus from "@assets/icons/plus.svg"
+import { useHorizontalScroll } from "@/utils/useHorizontalScroll"
 
-import type { Goal } from "../../../types/Goal"
+import type { Goal } from "@/types/Goal"
 
 interface WeekBoardLayoutProps {
     goals:Goal[]
