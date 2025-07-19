@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router"
 
 import DayBoardLayout from "@components/board/layout/day-board-layout"
 import WeekBoardLayout from "@components/board/layout/week-board-layout"
@@ -38,9 +39,11 @@ const Board = () => {
     return <>
         <div className="flex flex-col size-full bg-white">
             <div className="flex justify-between p-4 border-b border-gray-200">
-                <Button>
-                    <img className="size-4" src={ArrowLeft} alt="logout" />
-                </Button>
+                <Link to="/">
+                    <Button>
+                        <img className="size-4" src={ArrowLeft} alt="logout" />
+                    </Button>
+                </Link>
                 <div className="flex justify-end sm:gap-4">
                     { timelineOptions.map(option => 
                         <Button 

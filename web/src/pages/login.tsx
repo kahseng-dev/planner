@@ -1,12 +1,11 @@
+import { Link } from "react-router"
+
 import Button from "@components/button"
 
 const Login = () => {
 
     const handleLogin = () => {
         
-    }
-    
-    const handleRegister = () => {
     }
 
     return (
@@ -26,10 +25,16 @@ const Login = () => {
                 </label>
             </form>
             <div className="mt-2 flex flex-col gap-2">
-                <Button className="w-full py-2 bg-neutral-900 text-white border-none hover:bg-black" onClick={handleLogin}>Login</Button>
-                <Button onClick={handleLogin}>Continue as Guest</Button>
+                <Button 
+                    onClick={handleLogin}
+                    className="w-full py-2 bg-neutral-900 text-white border-none hover:bg-black">
+                    Login
+                </Button>
+                <Link to="/board">
+                    <Button className="w-full">Continue as Guest</Button>
+                </Link>
             </div>
-            <span className="self-center text-neutral-500 text-sm">Don't have an account? <button className="cursor-pointer text-black" onClick={handleRegister}>Sign Up</button></span>
+            <span className="self-center text-neutral-500 text-sm">Don't have an account? <Link to="/register" className="cursor-pointer text-black">Sign Up</Link></span>
         </div>
     )
 }
