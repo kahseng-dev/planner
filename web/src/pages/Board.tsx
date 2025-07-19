@@ -41,7 +41,7 @@ const Board = () => {
                 <Button>
                     <img className="size-4" src={ArrowLeft} alt="logout" />
                 </Button>
-                <div className="flex justify-end gap-4">
+                <div className="flex justify-end sm:gap-4">
                     { timelineOptions.map(option => 
                         <Button 
                             key={option}

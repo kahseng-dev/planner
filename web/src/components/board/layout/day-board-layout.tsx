@@ -32,7 +32,7 @@ const DayBoardLayout = ({ goals }:DayBoardLayoutProps) => {
             { daysOfMonth.map((dayOfMonth, index) => (
                 <div 
                     key={index}
-                    className="group/goal p-4 min-w-1/3 border-r border-gray-200 overflow-y-scroll">
+                    className="group/goal p-4 min-w-full md:min-w-1/3 lg:md:min-w-1/4 border-r border-gray-200 overflow-y-scroll">
                     <div className="flex items-center gap-2 mb-2">
                         <p className="text-neutral-800">{`${dayOfMonth?.day} ${firstDayOfActiveMonth.monthLong}`}</p>
                         { dayOfMonth?.toISODate() === today.toISODate() && <Tag text="today" /> }
