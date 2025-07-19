@@ -30,6 +30,14 @@ const GoalList = ({ goal }:GoalListProps) => {
         setIsGoalCompleted(isCompleted)
     }
 
+    const handleChangeGoalTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        // console.log(event.currentTarget.value)
+    }
+
+    const handleChangeTaskText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        // console.log(event.currentTarget.value)
+    }
+
     const handleDeleteGoal = () => {
 
     }
@@ -53,15 +61,17 @@ const GoalList = ({ goal }:GoalListProps) => {
 
     return (
         <div className="text-sm flex flex-col gap-2">
-            <div className="group/goal-item py-1 px-2 cursor-pointer flex items-center justify-between rounded transition duration-300 select-none hover:bg-gray-100">
-                <div className="flex items-start gap-2">
-                    { isGoalCompleted ? 
-                        <img className="mt-0.5 size-4" src={CircleCheckFilled} alt="circle-check-filled" />
-                        :
-                        <img className="mt-0.5 size-4" src={CircleCheck} alt="circle-check" />
-                    }
-                    <p className={`${isGoalCompleted && "text-neutral-400 line-through"} text-neutral-500 break-all`}>{goal.title}</p>
-                </div>
+            <div className="group/goal-item flex items-center gap-2">
+                { isGoalCompleted ? 
+                    <img className="mt-0.5 size-4" src={CircleCheckFilled} alt="circle-check-filled" />
+                    :
+                    <img className="mt-0.5 size-4" src={CircleCheck} alt="circle-check" />
+                }
+                <textarea 
+                    onChange={handleChangeGoalTitle}
+                    defaultValue={goal.title}
+                    rows={1}
+                    className={`${isGoalCompleted && "line-through"} py-1 px-2 w-full field-sizing-content resize-none outline-0 break-all text-neutral-500 rounded transition duration-300 hover:bg-gray-100`} />
                 <button 
                     onClick={handleDeleteGoal}
                     className="size-4 min-w-4 opacity-0 group-hover/goal-item:opacity-100 transition duration-300 cursor-pointer">
@@ -70,26 +80,27 @@ const GoalList = ({ goal }:GoalListProps) => {
             </div>
             <div className="group/task pl-5 w-full flex flex-col gap-2">
                 { tasks.map(task => 
-                    <label 
+                    <div 
                         key={task.id}
-                        htmlFor={`task[${task.id}]`} 
-                        className="group/task-item py-1 px-2 flex justify-between items-center gap-2 text-neutral-500 cursor-pointer rounded transition duration-300 break-all select-none hover:bg-gray-100 has-checked:text-neutral-400 has-checked:line-through">
-                        <div className="flex gap-2">
-                            <input 
+                        className="group/task-item flex items-center gap-2">
+                        <input 
                             onChange={() => handleToggleTask(task.id)}
                             type="checkbox" 
-                            id={`task[${task.id}]`} 
+                            id={`task[${task.id}]`}
                             value={task.text}
                             checked={task.isCompleted}
                             className="cursor-pointer" />
-                            <span>{task.text}</span>
-                        </div>
+                        <textarea 
+                            onChange={handleChangeTaskText}
+                            defaultValue={task.text}
+                            rows={1}
+                            className={`${task.isCompleted && "line-through"} py-1 px-2 w-full field-sizing-content resize-none outline-0 break-all text-neutral-500 rounded transition duration-300 hover:bg-gray-100`} />
                         <button 
                             onClick={() => handleDeleteTask(task.id)}
                             className="size-4 min-w-4 opacity-0 group-hover/task-item:opacity-100 transition duration-300 cursor-pointer">
                             <img src={X} alt="x" />
                         </button>
-                    </label>
+                    </div>
                 )}
                 <Button className="opacity-0 group-hover/task:opacity-100 w-full flex items-center gap-2">
                     <img className="size-4" src={Plus} alt="plus" />
