@@ -1,31 +1,17 @@
 import { useEffect, useState } from "react"
-import { DateTime, Interval } from "luxon"
 
-import Tag from "../components/tag"
+import DayBoardLayout from "../components/board/day-board-layout"
 import Button from "../components/button"
-import GoalList from "../components/goal-list"
-
 import { data } from "../tests/data"
-import { useHorizontalScroll } from "../utils/useHorizontalScroll"
-import Plus from "../assets/icons/plus.svg"
 
 import type { Goal } from "../types/Goal"
 
 const Board = () => {
 
-    const today = DateTime.local()
-    
     const [ goals, setGoals ] = useState<Goal[]>([])
     const [ timelineOption, setTimelineOption ] = useState("Year")
-    const [ firstDayOfActiveMonth, setFirstDayOfActiveMonth ] = useState(today.startOf("month"))
-
-    const daysOfMonth = Interval.fromDateTimes(
-        firstDayOfActiveMonth.startOf("month"), 
-        firstDayOfActiveMonth.endOf("month")
-    ).splitBy({ day: 1 }).map(day => day.start)
 
     const timelineOptions = [ "Day", "Week", "Month", "Year" ]
-    const horizontalScrollRef = useHorizontalScroll()
 
     const handleChangeTimeline = (option:string) => {
         setTimelineOption(option)
@@ -48,34 +34,7 @@ const Board = () => {
                     </Button>
                 )}
             </div>
-            <div 
-                ref={horizontalScrollRef}
-                className="flex flex-row h-full overflow-x-scroll">
-                { daysOfMonth.map((dayOfMonth, index) => (
-                    <div 
-                        key={index}
-                        className="group/goal p-4 min-w-1/3 border-r border-gray-200">
-                        <div className="flex items-center gap-2 mb-2">
-                            <p className="text-neutral-800">{`${dayOfMonth?.day} ${firstDayOfActiveMonth.monthLong}`}</p>
-                            { dayOfMonth?.toISODate() === today.toISODate() && <Tag text="today" /> }
-                        </div>
-                        <div className="flex flex-col gap-4">
-                            { goals.map(goal => {
-                                
-                                let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
-
-                                if (createdDateTime.toISODate() == dayOfMonth?.toISODate()) {
-                                    return <GoalList key={goal.id} goal={goal} />
-                                }
-                            })}
-                            <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
-                                <img className="size-4" src={Plus} alt="plus" />
-                                Add goal
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <DayBoardLayout goals={goals} />
         </div>
     </>
 }
