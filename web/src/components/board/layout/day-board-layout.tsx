@@ -1,26 +1,26 @@
 import { DateTime, Interval } from "luxon"
 
-import Tag from "../../components/tag"
-import Button from "../../components/button"
-import GoalList from "../../components/goal-list"
-import Plus from "../../assets/icons/plus.svg"
-import { useHorizontalScroll } from "../../utils/useHorizontalScroll"
+import Tag from "../../../components/tag"
+import Button from "../../../components/button"
+import GoalList from "../../../components/goal-list"
+import Plus from "../../../assets/icons/plus.svg"
+import { useHorizontalScroll } from "../../../utils/useHorizontalScroll"
 
-import type { Goal } from "../../types/Goal"
+import type { Goal } from "../../../types/Goal"
 
-interface WeekBoardLayoutProps {
+interface DayBoardLayoutProps {
     goals:Goal[]
 }
 
-const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
+const DayBoardLayout = ({ goals }:DayBoardLayoutProps) => {
 
     const today = DateTime.local()
 
-    const firstDayOfActiveWeek = today.startOf("week")
+    const firstDayOfActiveMonth = today.startOf("month")
 
-    const daysOfWeek = Interval.fromDateTimes(
-        firstDayOfActiveWeek.startOf("week"), 
-        firstDayOfActiveWeek.endOf("week")
+    const daysOfMonth = Interval.fromDateTimes(
+        firstDayOfActiveMonth.startOf("month"), 
+        firstDayOfActiveMonth.endOf("month")
     ).splitBy({ day: 1 }).map(day => day.start)
 
     const horizontalScrollRef = useHorizontalScroll()
@@ -29,18 +29,21 @@ const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
         <div 
             ref={horizontalScrollRef}
             className="flex flex-row h-full overflow-x-scroll">
-            { daysOfWeek.map((dayOfWeek, index) => (
+            { daysOfMonth.map((dayOfMonth, index) => (
                 <div 
                     key={index}
                     className="group/goal p-4 min-w-1/3 border-r border-gray-200 overflow-y-scroll">
                     <div className="flex items-center gap-2 mb-2">
-                        <p className="text-neutral-800">{dayOfWeek?.weekdayLong}</p>
-                        { dayOfWeek?.toISODate() == today.toISODate() && <Tag text="today" /> }
+                        <p className="text-neutral-800">{`${dayOfMonth?.day} ${firstDayOfActiveMonth.monthLong}`}</p>
+                        { dayOfMonth?.toISODate() === today.toISODate() && <Tag text="today" /> }
                     </div>
                     <div className="flex flex-col gap-4">
                         { goals.map(goal => {
                             let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
-                            return dayOfWeek?.toISODate() === createdDateTime.toISODate() && <GoalList key={goal.id} goal={goal} />
+
+                            if (createdDateTime.toISODate() == dayOfMonth?.toISODate()) {
+                                return <GoalList key={goal.id} goal={goal} />
+                            }
                         })}
                         <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
                             <img className="size-4" src={Plus} alt="plus" />
@@ -53,4 +56,4 @@ const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
     )
 }
 
-export default WeekBoardLayout
+export default DayBoardLayout

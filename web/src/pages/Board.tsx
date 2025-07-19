@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 
-import DayBoardLayout from "../components/board/day-board-layout"
-import WeekBoardLayout from "../components/board/week-board-layout"
-import MonthBoardLayout from "../components/board/month-board-layout"
-import YearBoardLayout from "../components/board/year-board-layout"
+import DayBoardLayout from "../components/board/layout/day-board-layout"
+import WeekBoardLayout from "../components/board/layout/week-board-layout"
+import MonthBoardLayout from "../components/board/layout/month-board-layout"
+import YearBoardLayout from "../components/board/layout/year-board-layout"
 
 import Button from "../components/button"
 import { data } from "../tests/data"
