@@ -17,10 +17,6 @@ const Board = () => {
 
     const timelineOptions = [ "Day", "Week", "Month", "Year" ]
 
-    const handleChangeTimeline = (option:string) => {
-        setTimelineOption(option)
-    }
-
     const loadBoardLayout = () => {
         switch(timelineOption) {
             case "Day":
@@ -40,23 +36,15 @@ const Board = () => {
 
     return <>
         <div className="flex flex-col h-screen">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <div className="flex items-center gap-2">
-                    <select>
-                        <option>2025</option>
-                    </select>
-                </div>
-                <div className="flex justify-end gap-2">
-                    <Button className="outline outline-gray-200 hover:border-transparent">Today</Button>
-                    { timelineOptions.map(option => 
-                        <Button 
-                            key={option}
-                            onClick={() => handleChangeTimeline(option)}
-                            className={timelineOption === option ? "text-neutral-500 bg-gray-100" : ""}>
-                            {option}
-                        </Button>
-                    )}
-                </div>
+            <div className="flex justify-end gap-4 p-4 border-b border-gray-200">
+                { timelineOptions.map(option => 
+                    <Button 
+                        key={option}
+                        onClick={() => setTimelineOption(option)}
+                        className={timelineOption === option ? "text-neutral-500 bg-gray-100" : ""}>
+                        {option}
+                    </Button>
+                )}
             </div>
             {loadBoardLayout()}
         </div>
