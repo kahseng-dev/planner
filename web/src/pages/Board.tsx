@@ -4,8 +4,9 @@ import DayBoardLayout from "@components/board/layout/day-board-layout"
 import WeekBoardLayout from "@components/board/layout/week-board-layout"
 import MonthBoardLayout from "@components/board/layout/month-board-layout"
 import YearBoardLayout from "@components/board/layout/year-board-layout"
-
 import Button from "@components/button"
+import ArrowLeft from "@assets/icons/arrow-left.svg"
+
 import { data } from "@/tests/data"
 
 import type { Goal } from "@/types/Goal"
@@ -36,15 +37,20 @@ const Board = () => {
 
     return <>
         <div className="flex flex-col h-screen">
-            <div className="flex justify-end gap-4 p-4 border-b border-gray-200">
-                { timelineOptions.map(option => 
-                    <Button 
-                        key={option}
-                        onClick={() => setTimelineOption(option)}
-                        className={timelineOption === option ? "text-neutral-500 bg-gray-100" : ""}>
-                        {option}
-                    </Button>
-                )}
+            <div className="flex justify-between p-4 border-b border-gray-200">
+                <Button>
+                    <img className="size-4" src={ArrowLeft} alt="logout" />
+                </Button>
+                <div className="flex justify-end gap-4">
+                    { timelineOptions.map(option => 
+                        <Button 
+                            key={option}
+                            onClick={() => setTimelineOption(option)}
+                            className={timelineOption === option ? "text-neutral-500 bg-gray-100" : ""}>
+                            {option}
+                        </Button>
+                    )}
+                </div>
             </div>
             {loadBoardLayout()}
         </div>
