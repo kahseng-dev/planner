@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react"
 
 import DayBoardLayout from "../components/board/day-board-layout"
+import WeekBoardLayout from "../components/board/week-board-layout"
+import MonthBoardLayout from "../components/board/month-board-layout"
+import YearBoardLayout from "../components/board/year-board-layout"
+
 import Button from "../components/button"
 import { data } from "../tests/data"
 
@@ -15,6 +19,19 @@ const Board = () => {
 
     const handleChangeTimeline = (option:string) => {
         setTimelineOption(option)
+    }
+
+    const loadBoardLayout = () => {
+        switch(timelineOption) {
+            case "Day":
+                return <DayBoardLayout goals={goals} />
+            case "Week":
+                return <WeekBoardLayout goals={goals} />
+            case "Month":
+                return <MonthBoardLayout goals={goals} />
+            case "Year":
+                return <YearBoardLayout goals={goals} />
+        }
     }
 
     useEffect(() => {
@@ -34,7 +51,7 @@ const Board = () => {
                     </Button>
                 )}
             </div>
-            <DayBoardLayout goals={goals} />
+            {loadBoardLayout()}
         </div>
     </>
 }
