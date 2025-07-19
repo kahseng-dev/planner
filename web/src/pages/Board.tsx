@@ -36,7 +36,7 @@ const Board = () => {
     }, [])
 
     return <>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col size-full bg-white">
             <div className="flex justify-between p-4 border-b border-gray-200">
                 <Button>
                     <img className="size-4" src={ArrowLeft} alt="logout" />
