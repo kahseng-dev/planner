@@ -1,6 +1,5 @@
 package com.kahseng.planner.dtos;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,14 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class RegisterRequest {
-    
-    @NotEmpty
-    private String name;
+public class LoginRequest {
 
-    @NotEmpty
     private String email;
-
-    @NotEmpty
+    
     private char[] password;
+    
 }

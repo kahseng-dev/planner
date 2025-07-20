@@ -1,50 +1,63 @@
 package com.kahseng.planner.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.nio.CharBuffer;
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kahseng.planner.dtos.LoginRequest;
 import com.kahseng.planner.dtos.RegisterRequest;
-import com.kahseng.planner.dtos.UserResponse;
+import com.kahseng.planner.dtos.UserDto;
 import com.kahseng.planner.models.User;
 import com.kahseng.planner.repositories.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserResponse register(RegisterRequest request) {
+    private final PasswordEncoder passwordEncoder;
 
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+    private final UserMapper userMapper;
+
+    public UserDto register(RegisterRequest request) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+
+        if (optionalUser.isPresent()) {
+            throw new RuntimeException("Account already exists");
         }
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        User user = userMapper.registerRequestToUser(request); 
+
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(request.getPassword())));
 
         User savedUser = userRepository.save(user);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(savedUser.getId());
-        userResponse.setName(savedUser.getName());
-        userResponse.setEmail(savedUser.getEmail());
-        userResponse.setPassword(savedUser.getPassword());
 
-        return userResponse;
+        return userMapper.toUserDto(savedUser);
     }
 
-    public UserResponse getUserProfile(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDto login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("User not found"));
         
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPassword(user.getPassword());
+        boolean passwordMatches = passwordEncoder.matches(CharBuffer.wrap(request.getPassword()), user.getPassword());
 
-        return userResponse;
+        if (passwordMatches) {
+            return userMapper.toUserDto(user);
+        }
+
+        throw new RuntimeException("Invalid password");
+    }
+
+    public UserDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return userMapper.toUserDto(user);
     }
 }
