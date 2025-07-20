@@ -22,7 +22,7 @@ const Login = () => {
         setIsLoading(true)
 
         request("POST", 
-                "/api/users/login", 
+                "/users/login", 
                 { email: form.email, password: form.password })
                 .then(response => {
                     setAuthToken(response.data.token)

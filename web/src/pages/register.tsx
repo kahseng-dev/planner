@@ -22,7 +22,7 @@ const Register = () => {
         setIsLoading(true)
 
         request("POST", 
-                "/api/users/register", 
+                "/users/register", 
                 { name: form.name, email: form.email, password: form.password })
                 .then(response => {
                     setAuthToken(response.data.token)
