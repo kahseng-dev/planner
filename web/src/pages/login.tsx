@@ -3,28 +3,36 @@ import { useNavigate } from "react-router"
 import type { ChangeEvent, FormEvent } from "react"
 
 import Button from "@components/button"
-
-import { login } from "@/services/api"
+import { request, setAuthToken } from "@/services/api"
 
 const Login = () => {
 
     const [ isLoading, setIsLoading ] = useState(false)
     const [ form, setForm ] = useState({ email: "", password: "" })
-    const [ data, setData ] = useState(null)
 
     const navigate = useNavigate()
 
     const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
-        return setForm({ ...form, [event.target?.name]: event.target?.value, })
+        setForm({ ...form, [event.target?.name]: event.target?.value, })
     }
 
     const handleSubmit = (event:FormEvent) => {
         event.preventDefault()
+
         setIsLoading(true)
-        console.log(form)
-        return 
-        // data = login(form)
-        // setIsLoading(false)
+
+        request("POST", 
+                "/api/users/login", 
+                { email: form.email, password: form.password })
+                .then(response => {
+                    setAuthToken(response.data.token)
+                    setIsLoading(false)
+                    navigate("/board")
+                })
+                .catch(error => {
+                    console.error(error)
+                    setIsLoading(false)
+                })
     }
 
     return (
@@ -67,14 +75,14 @@ const Login = () => {
                 <Button 
                     type="submit"
                     disabled={isLoading}
-                    className="mt-2 w-full py-2 bg-neutral-900 text-white border-none hover:bg-black">
+                    className="mt-2 w-full py-2 bg-neutral-900 text-white border-none hover:bg-black disabled:bg-neutral-800">
                     Login
                 </Button>
             </form>
             <Button 
                 onClick={() => navigate("/board")}
                 disabled={isLoading}
-                className="mt-2 w-full">
+                className="mt-2 w-full disabled:bg-neutral-300">
                 Continue as Guest
             </Button>
             <span className="mt-4 self-center text-neutral-500 text-sm">Don't have an account?

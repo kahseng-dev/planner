@@ -29,21 +29,3 @@ export const request = (method:string, url:string, data:any) => {
     data: data,
   })
 }
-
-export const login = async (email:string, password:string) => {
-  request(
-    "POST", 
-    "/api/users/login", 
-    { email: email, password: password })
-    .then(response => setAuthToken(response.data.token))
-    .catch(error => console.error(error))
-}
-
-export const register = async (name:string, email:string, password:string) => {
-  request(
-    "POST", 
-    "/api/users/register", 
-    { name: name, email: email, password: password, })
-    .then(response => setAuthToken(response.data.token))
-    .catch(error => console.error(error))
-}
