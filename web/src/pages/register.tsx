@@ -13,7 +13,7 @@ const Register = () => {
     const navigate = useNavigate()
 
     const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
-        return setForm({ ...form, [event.target?.name]: event.target?.value, })
+        setForm({ ...form, [event.target?.name]: event.target?.value, })
     }
 
     const handleSubmit = (event:FormEvent) => {
@@ -36,7 +36,7 @@ const Register = () => {
     }
 
     return (
-        <div className="py-4 px-6 flex flex-col bg-neutral-50 border border-neutral-300">
+        <div className="h-full md:h-min py-8 md:py-4 px-6 flex flex-col bg-neutral-50 border border-neutral-300">
             <div>
                 <h2 className="text-xl font-semibold">Sign Up</h2>
                 <span className="text-neutral-500 text-sm">Enter your credentials below to register your account</span>

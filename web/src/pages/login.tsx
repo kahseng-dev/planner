@@ -36,7 +36,7 @@ const Login = () => {
     }
 
     return (
-        <div className="py-4 px-6 flex flex-col bg-neutral-50 border border-neutral-300">
+        <div className="h-full md:h-min py-8 md:py-4 px-6 flex flex-col bg-neutral-50 border border-neutral-300">
             <div>
                 <h2 className="text-xl font-semibold">Sign In</h2>
                 <span className="text-neutral-500 text-sm">Enter your credentials below to access your account</span>
