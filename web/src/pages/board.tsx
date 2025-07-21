@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react"
-
-import DayBoardLayout from "@components/board/layout/day-board-layout"
-import WeekBoardLayout from "@components/board/layout/week-board-layout"
-import MonthBoardLayout from "@components/board/layout/month-board-layout"
-import YearBoardLayout from "@components/board/layout/year-board-layout"
+import { DateTime, Interval } from "luxon"
 
 import Sidebar from "@components/sidebar"
 import Button from "@components/button"
 import SidebarIcon from "@assets/icons/sidebar.svg"
+import BoardLayout from "@components/board/board-layout"
 import { useHorizontalScroll } from "@/utils/useHorizontalScroll"
 
 import { data } from "@/tests/data"
@@ -25,16 +22,46 @@ const Board = () => {
     const horizontalScrollRef = useHorizontalScroll()
 
     const loadBoardLayout = () => {
+
+        const today = DateTime.local()
+
+        let dateList:(DateTime<true> | null)[] = []
+
         switch(timelineOption) {
             case "Day":
-                return <DayBoardLayout goals={goals} setGoals={setGoals} />
+                dateList = Interval.fromDateTimes(
+                    today.startOf("month"), 
+                    today.endOf("month")
+                ).splitBy({ day: 1 }).map(day => day.start)
+                break
+
             case "Week":
-                return <WeekBoardLayout goals={goals} setGoals={setGoals} />
+                dateList = Interval.fromDateTimes(
+                    today.startOf("week"), 
+                    today.endOf("week")
+                ).splitBy({ day: 1 }).map(day => day.start)
+                break 
+
             case "Month":
-                return <MonthBoardLayout goals={goals} setGoals={setGoals} />
+                dateList = Interval.fromDateTimes(
+                    today.startOf("year"), 
+                    today.endOf("year")
+                ).splitBy({ month: 1 }).map(day => day.start)
+                break
+
             case "Year":
-                return <YearBoardLayout goals={goals} setGoals={setGoals} />
+                dateList = Interval.fromDateTimes(
+                    today, 
+                    (today.set({ year: today.year + 11 }))
+                ).splitBy({ year: 1 }).map(day => day.start)
+                break
         }
+
+        return <BoardLayout 
+            dateList={dateList} 
+            timeline={timelineOption} 
+            goals={goals} 
+            setGoals={setGoals} />
     }
 
     useEffect(() => {
