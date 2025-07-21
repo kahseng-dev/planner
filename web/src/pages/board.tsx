@@ -5,8 +5,9 @@ import DayBoardLayout from "@components/board/layout/day-board-layout"
 import WeekBoardLayout from "@components/board/layout/week-board-layout"
 import MonthBoardLayout from "@components/board/layout/month-board-layout"
 import YearBoardLayout from "@components/board/layout/year-board-layout"
+import Sidebar from "@components/sidebar"
 import Button from "@components/button"
-import ArrowLeft from "@assets/icons/arrow-left.svg"
+import SidebarIcon from "@assets/icons/sidebar.svg"
 
 import { data } from "@/tests/data"
 
@@ -16,8 +17,13 @@ const Board = () => {
 
     const [ goals, setGoals ] = useState<Goal[]>([])
     const [ timelineOption, setTimelineOption ] = useState("Year")
+    const [ isSidebarOpen, setIsSidebarOpen ] = useState(false)
 
     const timelineOptions = [ "Day", "Week", "Month", "Year" ]
+
+    const handleToggleSidebar = () => {
+        return setIsSidebarOpen(!isSidebarOpen)
+    }
 
     const loadBoardLayout = () => {
         switch(timelineOption) {
@@ -38,12 +44,11 @@ const Board = () => {
 
     return <>
         <div className="flex flex-col size-full bg-white">
+            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             <div className="flex justify-between p-4 border-b border-gray-200">
-                <Link to="/">
-                    <Button>
-                        <img className="size-4" src={ArrowLeft} alt="logout" />
-                    </Button>
-                </Link>
+                <Button onClick={handleToggleSidebar}>
+                    <img className="size-5" src={SidebarIcon} alt="sidebar-icon" />
+                </Button>
                 <div className="flex justify-end sm:gap-4">
                     { timelineOptions.map(option => 
                         <Button 
