@@ -12,6 +12,8 @@ import TaskList from "@components/task-list"
 import type { Goal } from "@/types/Goal"
 import type { Task } from "@/types/Task"
 
+import { setStore } from "@/services/store"
+
 interface GoalListProps {
     goal:Goal,
     goals:Goal[],
@@ -20,42 +22,39 @@ interface GoalListProps {
 
 const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
 
-    const [ tasks, setTasks ] = useState<Task[]>(goal.tasks)
     const [ isGoalCompleted, setIsGoalCompleted ] = useState(false)
     
     const updateGoalIsCompleted = () => {
-        if (tasks.length < 1) return 
+        if (goal.tasks.length < 1) return setIsGoalCompleted(false)
 
-        let isCompleted = true
+        if (!goal.tasks.every(task => task.isCompleted === true)) {
+            return setIsGoalCompleted(false)
+        }
 
-        tasks.map(task => {
-            if (!task.isCompleted) return isCompleted = false
-        })
-
-        setIsGoalCompleted(isCompleted)
+        return setIsGoalCompleted(true)
     }
 
     const handleChangeGoalTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        return setGoals(goals.map(goalItem => goalItem.id !== goal.id ?
-                { ...goalItem }
-                :
-                { ...goalItem, title: event.currentTarget.value }
-            )
-        )
+        goal.title = event.currentTarget.value
+        setStore(goals)
     }
 
     const handleDeleteGoal = () => {
-        setGoals(goals.filter(goalItem => goalItem.id !== goal.id))
+        goals = goals.filter(goalItem => goalItem.id !== goal.id)
+        setGoals(goals)
+        setStore(goals)
     }
 
     const handleAddTask = () => {
-        let task:Task = { id:tasks.length + 1, text:"", isCompleted:false, }
-        setTasks([...tasks, task])
+        const task:Task = { id:goal.tasks.length + 1, text:"", isCompleted:false, }
+        goal.tasks.push(task)
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     useEffect(() => {
         updateGoalIsCompleted()
-    }, [tasks])
+    }, [goals])
 
     return (
         <div className="text-sm flex flex-col gap-2">
@@ -77,12 +76,13 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
                 </button>
             </div>
             <div className="group/task pl-5 w-full flex flex-col gap-2">
-                { tasks.map((task, index) => 
+                { goal.tasks.map((task, index) => 
                     <TaskList 
                         key={index} 
-                        task={task} 
-                        tasks={tasks} 
-                        setTasks={setTasks} />
+                        task={task}
+                        goal={goal}
+                        goals={goals} 
+                        setGoals={setGoals} />
                 )}
                 <Button 
                     onClick={handleAddTask}

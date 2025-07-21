@@ -1,44 +1,56 @@
-import type { Task } from "@/types/Task"
 import type { ChangeEvent, Dispatch, SetStateAction } from "react"
 
+import type { Task } from "@/types/Task"
+import type { Goal } from "@/types/Goal"
 import X from "@assets/icons/x.svg"
+import { setStore } from "@/services/store"
 
 interface TaskListProps {
     task:Task,
-    tasks:Task[],
-    setTasks:Dispatch<SetStateAction<Task[]>>,
+    goal:Goal,
+    goals:Goal[],
+    setGoals:Dispatch<SetStateAction<Goal[]>>,
 }
 
-const TaskList = ({ task, tasks, setTasks }:TaskListProps) => {
+const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
 
     const handleChangeTaskText = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        return setTasks(tasks.map(taskItem => taskItem.id !== task.id ?
-                { ...taskItem }
-                :
-                { ...taskItem, text: event.currentTarget.value }
-            )
-        )
+
+        task.text = event.currentTarget.value
+        
+        goal.tasks.map(taskItem => {
+            if (taskItem.id !== task.id) return { ...taskItem }
+            return { ...taskItem, task }
+        })
+
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     const handleToggleTask = () => {
-        return setTasks(tasks.map(taskItem => taskItem.id !== task.id ?
-                { ...taskItem }
-                :
-                { ...taskItem, isCompleted: !taskItem.isCompleted }
-            )
-        )
+
+        task.isCompleted = !task.isCompleted
+
+        goal.tasks.map(taskItem => {
+            if (taskItem.id !== task.id) return { ...taskItem }
+            return { ...taskItem, task }
+        })
+
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     const handleDeleteTask = () => {
-        return setTasks(tasks.filter(taskItem => taskItem.id !== task.id))
+        goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     return (
         <div className="group/task-item flex items-center gap-2">
             <input 
                 onChange={handleToggleTask}
-                type="checkbox" 
-                id={`task[${task.id}]`}
+                type="checkbox"
                 checked={task.isCompleted}
                 className="cursor-pointer" />
             <textarea 
