@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { DateTime, Interval } from "luxon"
 
 import Sidebar from "@components/sidebar"
@@ -7,66 +7,48 @@ import SidebarIcon from "@assets/icons/sidebar.svg"
 import BoardLayout from "@components/board/board-layout"
 import { useHorizontalScroll } from "@/utils/useHorizontalScroll"
 
-import { data } from "@/tests/data"
-
-import type { Goal } from "@/types/Goal"
-
 const Board = () => {
 
-    const [ goals, setGoals ] = useState<Goal[]>([])
     const [ timelineOption, setTimelineOption ] = useState("Year")
     const [ isSidebarOpen, setIsSidebarOpen ] = useState(false)
 
-    const timelineOptions = [ "Day", "Week", "Month", "Year" ]
-
-    const horizontalScrollRef = useHorizontalScroll()
-
-    const loadBoardLayout = () => {
+    const getDateList = () => {
 
         const today = DateTime.local()
 
-        let dateList:(DateTime<true> | null)[] = []
-
         switch(timelineOption) {
             case "Day":
-                dateList = Interval.fromDateTimes(
+                return Interval.fromDateTimes(
                     today.startOf("month"), 
                     today.endOf("month")
                 ).splitBy({ day: 1 }).map(day => day.start)
-                break
 
             case "Week":
-                dateList = Interval.fromDateTimes(
+                return Interval.fromDateTimes(
                     today.startOf("week"), 
                     today.endOf("week")
                 ).splitBy({ day: 1 }).map(day => day.start)
-                break 
 
             case "Month":
-                dateList = Interval.fromDateTimes(
+                return Interval.fromDateTimes(
                     today.startOf("year"), 
                     today.endOf("year")
                 ).splitBy({ month: 1 }).map(day => day.start)
-                break
 
             case "Year":
-                dateList = Interval.fromDateTimes(
+                return Interval.fromDateTimes(
                     today, 
                     (today.set({ year: today.year + 11 }))
                 ).splitBy({ year: 1 }).map(day => day.start)
-                break
-        }
 
-        return <BoardLayout 
-            dateList={dateList} 
-            timeline={timelineOption} 
-            goals={goals} 
-            setGoals={setGoals} />
+            default:
+                return []
+        }
     }
 
-    useEffect(() => {
-        setGoals(data)
-    }, [])
+    const timelineOptions = [ "Day", "Week", "Month", "Year" ]
+    const horizontalScrollRef = useHorizontalScroll()
+    const dateList = getDateList()
 
     return <>
         <div className="flex flex-col size-full bg-white">
@@ -89,7 +71,7 @@ const Board = () => {
             <div 
                 ref={horizontalScrollRef} 
                 className="flex flex-row h-full overflow-x-scroll">
-                {loadBoardLayout()}
+                <BoardLayout dateList={dateList} timeline={timelineOption} />
             </div>
         </div>
     </>

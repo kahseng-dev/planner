@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import type { Dispatch, SetStateAction } from "react"
+import { useEffect, useState } from "react"
 
 import Tag from "@components/tag"
 import Button from "@components/button"
@@ -7,15 +7,16 @@ import GoalList from "@components/goal-list"
 import Plus from "@assets/icons/plus.svg"
 
 import type { Goal } from "@/types/Goal"
+import { setStore, getStore } from "@/services/store"
 
 interface BoardLayoutProps {
     timeline:string,
     dateList:(DateTime<true> | null)[],
-    goals:Goal[],
-    setGoals:Dispatch<SetStateAction<Goal[]>>,
 }
 
-const BoardLayout = ({ dateList, timeline, goals, setGoals }:BoardLayoutProps) => {
+const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
+    
+    const [ goals, setGoals ] = useState<Goal[]>([])
 
     const today = DateTime.local()
 
@@ -46,8 +47,18 @@ const BoardLayout = ({ dateList, timeline, goals, setGoals }:BoardLayoutProps) =
     
     const handleAddGoal = (date:DateTime) => {
         let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
-        return setGoals([...goals, goal])
+        setGoals([...goals, goal])
+        setStore([...goals, goal])
+        return 
     }
+
+    useEffect(() => {
+        let data = getStore()
+
+        if (data) {
+            setGoals(data)
+        }
+    }, [])
 
     return <> 
         { dateList.map((day, index) => (
