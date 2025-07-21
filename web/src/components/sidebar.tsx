@@ -6,6 +6,7 @@ import SidebarIcon from "@assets/icons/sidebar.svg"
 import GithubIcon from "@assets/icons/github.svg"
 import BoardIcon from "@assets/icons/home.svg"
 import LogoutIcon from "@assets/icons/logout.svg"
+import { getAuthToken } from "@/services/api"
 
 interface SidebarProps {
     isOpen:boolean,
@@ -13,6 +14,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
+
+    const isUser = getAuthToken()
 
     const navigate = useNavigate()
 
@@ -34,6 +37,13 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
                     <span className="cursor-default">Planner</span>
                 </div>
                 <div className="py-4 h-full *:px-4 *:border-l-4 *:border-transparent gap-4 flex flex-col">
+                    { !isUser && 
+                        <span className={`${isOpen ? "visible" : "invisible"} w-xs p-4 bg-red-100 text-red-400 transition duration-300`}>
+                            WARNING: you are logged in as guest, your data will not be saved on the server.<br/><br/>
+                            Please create an account to save your data.
+                            <Link className="ml-2 text-red-600 hover:underline" to="/register">Create an account</Link>
+                        </span>
+                    }
                     <span className="text-neutral-400 cursor-default">Menu</span>
                     <Link to="/board"
                         className="py-2 gap-4 flex items-center cursor-pointer text-neutral-500 transition hover:bg-gray-100 hover:border-gray-400">
