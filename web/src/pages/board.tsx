@@ -4,6 +4,7 @@ import DayBoardLayout from "@components/board/layout/day-board-layout"
 import WeekBoardLayout from "@components/board/layout/week-board-layout"
 import MonthBoardLayout from "@components/board/layout/month-board-layout"
 import YearBoardLayout from "@components/board/layout/year-board-layout"
+
 import Sidebar from "@components/sidebar"
 import Button from "@components/button"
 import SidebarIcon from "@assets/icons/sidebar.svg"
@@ -26,13 +27,13 @@ const Board = () => {
     const loadBoardLayout = () => {
         switch(timelineOption) {
             case "Day":
-                return <DayBoardLayout goals={goals} />
+                return <DayBoardLayout goals={goals} setGoals={setGoals} />
             case "Week":
-                return <WeekBoardLayout goals={goals} />
+                return <WeekBoardLayout goals={goals} setGoals={setGoals} />
             case "Month":
-                return <MonthBoardLayout goals={goals} />
+                return <MonthBoardLayout goals={goals} setGoals={setGoals} />
             case "Year":
-                return <YearBoardLayout goals={goals} />
+                return <YearBoardLayout goals={goals} setGoals={setGoals} />
         }
     }
 

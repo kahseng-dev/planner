@@ -1,4 +1,5 @@
 import { DateTime, Interval } from "luxon"
+import { type Dispatch, type SetStateAction } from "react"
 
 import Tag from "@components/tag"
 import Button from "@components/button"
@@ -8,10 +9,11 @@ import Plus from "@assets/icons/plus.svg"
 import type { Goal } from "@/types/Goal"
 
 interface WeekBoardLayoutProps {
-    goals:Goal[]
+    goals:Goal[],
+    setGoals:Dispatch<SetStateAction<Goal[]>>,
 }
 
-const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
+const WeekBoardLayout = ({ goals, setGoals }:WeekBoardLayoutProps) => {
 
     const today = DateTime.local()
 
@@ -21,6 +23,11 @@ const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
         firstDayOfActiveWeek.startOf("week"), 
         firstDayOfActiveWeek.endOf("week")
     ).splitBy({ day: 1 }).map(day => day.start)
+
+    const handleAddGoal = (date:DateTime) => {
+        let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
+        return setGoals([...goals, goal])
+    }
 
     return <> 
         { daysOfWeek.map((dayOfWeek, index) => (
@@ -34,9 +41,18 @@ const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
                 <div className="flex flex-col gap-4">
                     { goals.map(goal => {
                         let date = DateTime.fromJSDate(goal.date)
-                        return dayOfWeek?.toISODate() === date.toISODate() && <GoalList key={goal.id} goal={goal} />
+
+                        if (dayOfWeek?.toISODate() === date.toISODate()) {
+                            return <GoalList 
+                                key={index} 
+                                goal={goal} 
+                                goals={goals} 
+                                setGoals={setGoals} />
+                        }
                     })}
-                    <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
+                    <Button 
+                        onClick={() => handleAddGoal(dayOfWeek!)} 
+                        className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
                         <img className="size-4" src={Plus} alt="plus" />
                         Add goal
                     </Button>

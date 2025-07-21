@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 
 import Layout from "@/pages/_layout"
@@ -8,8 +7,6 @@ import Board from "@/pages/board"
 import Register from "@/pages/register"
 
 const App = () => {
-  const [ isLoggedIn, setIsLoggedIn ] = useState(false)
-
   return (
     <BrowserRouter>
       <Routes>

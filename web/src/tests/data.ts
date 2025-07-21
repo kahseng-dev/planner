@@ -17,7 +17,7 @@ export const data = [
         date: new Date('2025-07-18T00:00:00'),
         tasks: [
             {
-                id: 2,
+                id: 1,
                 text: "task",
                 isCompleted: false,
             }
@@ -29,12 +29,12 @@ export const data = [
         date: new Date('2025-07-10T00:00:00'),
         tasks: [
             {
-                id: 3,
+                id: 1,
                 text: "THIS IS A LONGGGGGGGGGGGGGGGGGGGGGGGGGGG TASK text",
                 isCompleted: true,
             },
             {
-                id: 4,
+                id: 2,
                 text: "this is a normal text",
                 isCompleted: false,
             },
@@ -46,17 +46,17 @@ export const data = [
         date: new Date('2025-07-14T00:00:00'),
         tasks: [
             {
-                id: 5,
+                id: 1,
                 text: "Buy comfortable running shoes",
                 isCompleted: false,
             },
             {
-                id: 6,
+                id: 2,
                 text: "Complete a training plan",
                 isCompleted: true,
             },
             {
-                id: 7,
+                id: 3,
                 text: "Register for a local race",
                 isCompleted: true,
             },
@@ -68,7 +68,7 @@ export const data = [
         date: new Date(),
         tasks: [
             {
-                id: 8,
+                id: 1,
                 text: "Buy food",
                 isCompleted: false,
             },
