@@ -7,6 +7,7 @@ import YearBoardLayout from "@components/board/layout/year-board-layout"
 import Sidebar from "@components/sidebar"
 import Button from "@components/button"
 import SidebarIcon from "@assets/icons/sidebar.svg"
+import { useHorizontalScroll } from "@/utils/useHorizontalScroll"
 
 import { data } from "@/tests/data"
 
@@ -20,9 +21,7 @@ const Board = () => {
 
     const timelineOptions = [ "Day", "Week", "Month", "Year" ]
 
-    const handleToggleSidebar = () => {
-        return setIsSidebarOpen(!isSidebarOpen)
-    }
+    const horizontalScrollRef = useHorizontalScroll()
 
     const loadBoardLayout = () => {
         switch(timelineOption) {
@@ -45,7 +44,7 @@ const Board = () => {
         <div className="flex flex-col size-full bg-white">
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             <div className="flex justify-between p-4 border-b border-gray-200">
-                <Button onClick={handleToggleSidebar}>
+                <Button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                     <img className="size-5" src={SidebarIcon} alt="sidebar-icon" />
                 </Button>
                 <div className="flex justify-end sm:gap-4">
@@ -59,7 +58,11 @@ const Board = () => {
                     )}
                 </div>
             </div>
-            {loadBoardLayout()}
+            <div 
+                ref={horizontalScrollRef} 
+                className="flex flex-row h-full overflow-x-scroll">
+                {loadBoardLayout()}
+            </div>
         </div>
     </>
 }
