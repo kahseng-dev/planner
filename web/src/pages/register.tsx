@@ -3,12 +3,13 @@ import { useNavigate } from "react-router"
 import type { ChangeEvent, FormEvent } from "react"
 
 import Button from "@components/button"
-import { request, setAuthToken } from "@/services/api"
+import { request, errorLog, setAuthToken } from "@/services/api"
 
 const Register = () => {
 
     const [ isLoading, setIsLoading ] = useState(false)
     const [ form, setForm ] = useState({ name: "", email: "", password: "" })
+    const [ error, setError ] = useState<string | null>(null)
 
     const navigate = useNavigate()
 
@@ -20,6 +21,7 @@ const Register = () => {
         event.preventDefault()
         
         setIsLoading(true)
+        setError(null)
 
         request("POST", 
                 "/users/register", 
@@ -30,16 +32,26 @@ const Register = () => {
                     navigate("/board")
                 })
                 .catch(error => {
-                    console.error(error)
+                    errorLog(error)
+
+                    if (error.response) {
+                        setError("Please check your credentials")
+                    }
+
+                    else if (error.request) {
+                        setError("Please check your connection")
+                    }
+
                     setIsLoading(false)
                 })
     }
 
     return (
         <div className="h-full md:h-min py-8 md:py-4 px-6 flex flex-col bg-neutral-50 border border-neutral-300">
-            <div>
+            <div className="flex flex-col gap-1">
                 <h2 className="text-xl font-semibold">Sign Up</h2>
                 <span className="text-neutral-500 text-sm">Enter your credentials below to register your account</span>
+                { error && <span className="mt-2 text-sm text-red-500 bg-red-100 rounded w-full p-2">{error}</span>}
             </div>
             <form 
                 onSubmit={handleSubmit}
