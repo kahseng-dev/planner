@@ -28,7 +28,7 @@ public class Goal {
     private User user;
 
     private String title;
-    private LocalDateTime createdDateTime;
+    private LocalDateTime date;
     
     @OneToMany(mappedBy = "goal",
                 cascade = CascadeType.ALL,

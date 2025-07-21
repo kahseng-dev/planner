@@ -2,7 +2,7 @@ export const data = [
     {
         id: 1,
         title: "goal title",
-        createdDateTime: new Date('2025-07-18T00:00:00'),
+        date: new Date('2025-07-18T00:00:00'),
         tasks: [
             {
                 id: 1,
@@ -14,7 +14,7 @@ export const data = [
     {
         id: 2,
         title: "another goal",
-        createdDateTime: new Date('2025-07-18T00:00:00'),
+        date: new Date('2025-07-18T00:00:00'),
         tasks: [
             {
                 id: 2,
@@ -26,7 +26,7 @@ export const data = [
     {
         id: 3,
         title: "THIS IS A LONGGGGGGGGGGGGGGGGGGGGGGGGGGG goal title 2",
-        createdDateTime: new Date('2025-07-10T00:00:00'),
+        date: new Date('2025-07-10T00:00:00'),
         tasks: [
             {
                 id: 3,
@@ -43,7 +43,7 @@ export const data = [
     {
         id: 4,
         title: "Run a 5k race",
-        createdDateTime: new Date('2025-07-14T00:00:00'),
+        date: new Date('2025-07-14T00:00:00'),
         tasks: [
             {
                 id: 5,
@@ -65,7 +65,7 @@ export const data = [
     {
         id: 5,
         title: "today goal",
-        createdDateTime: new Date(),
+        date: new Date(),
         tasks: [
             {
                 id: 8,

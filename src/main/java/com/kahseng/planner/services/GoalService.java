@@ -28,10 +28,10 @@ public class GoalService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Goal goal = new Goal();
-        LocalDateTime createdDateTime = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now();
         
         goal.setTitle(title);
-        goal.setCreatedDateTime(createdDateTime);
+        goal.setDate(date);
         goal.setUser(user);
 
         goalRepository.save(goal);

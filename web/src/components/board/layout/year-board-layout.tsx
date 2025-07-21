@@ -39,8 +39,8 @@ const YearBoardLayout = ({ goals }:YearBoardLayoutProps) => {
                     </div>
                     <div className="flex flex-col gap-4">
                         { goals.map(goal => {
-                            let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
-                            return year === createdDateTime.year && <GoalList key={goal.id} goal={goal} />
+                            let date = DateTime.fromJSDate(goal.date)
+                            return year === date.year && <GoalList key={goal.id} goal={goal} />
                         })}
                         <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
                             <img className="size-4" src={Plus} alt="plus" />

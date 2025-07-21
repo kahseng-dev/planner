@@ -39,9 +39,9 @@ const DayBoardLayout = ({ goals }:DayBoardLayoutProps) => {
                     </div>
                     <div className="flex flex-col gap-4">
                         { goals.map(goal => {
-                            let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
+                            let date = DateTime.fromJSDate(goal.date)
 
-                            if (createdDateTime.toISODate() == dayOfMonth?.toISODate()) {
+                            if (date.toISODate() == dayOfMonth?.toISODate()) {
                                 return <GoalList key={goal.id} goal={goal} />
                             }
                         })}

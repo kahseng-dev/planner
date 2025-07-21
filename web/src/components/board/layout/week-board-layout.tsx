@@ -39,8 +39,8 @@ const WeekBoardLayout = ({ goals }:WeekBoardLayoutProps) => {
                     </div>
                     <div className="flex flex-col gap-4">
                         { goals.map(goal => {
-                            let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
-                            return dayOfWeek?.toISODate() === createdDateTime.toISODate() && <GoalList key={goal.id} goal={goal} />
+                            let date = DateTime.fromJSDate(goal.date)
+                            return dayOfWeek?.toISODate() === date.toISODate() && <GoalList key={goal.id} goal={goal} />
                         })}
                         <Button className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
                             <img className="size-4" src={Plus} alt="plus" />

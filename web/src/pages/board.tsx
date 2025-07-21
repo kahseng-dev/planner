@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router"
 
 import DayBoardLayout from "@components/board/layout/day-board-layout"
 import WeekBoardLayout from "@components/board/layout/week-board-layout"

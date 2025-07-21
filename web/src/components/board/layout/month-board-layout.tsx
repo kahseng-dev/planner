@@ -39,11 +39,11 @@ const MonthBoardLayout = ({ goals }:MonthBoardLayoutProps) => {
                     </div>
                     <div className="flex flex-col gap-4">
                         { goals.map(goal => {
-                            let createdDateTime = DateTime.fromJSDate(goal.createdDateTime)
+                            let date = DateTime.fromJSDate(goal.date)
 
-                            if (createdDateTime.year != monthOfYear?.year) return
+                            if (date.year != monthOfYear?.year) return
 
-                            if (createdDateTime.month != monthOfYear?.month) return
+                            if (date.month != monthOfYear?.month) return
 
                             return <GoalList key={goal.id} goal={goal} />
                         })}
