@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { jwtDecode } from "jwt-decode"
 import type { Dispatch, SetStateAction } from "react"
 
 import CircleCheck from "@assets/icons/circle-check.svg"
@@ -11,8 +12,10 @@ import TaskList from "@components/task-list"
 
 import type { Goal } from "@/types/Goal"
 import type { Task } from "@/types/Task"
+import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
 
 import { setStore } from "@/services/store"
+import { getAuthToken, replaceGoalTitle, deleteGoal } from "@/services/api"
 
 interface GoalListProps {
     goal:Goal,
@@ -24,9 +27,7 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
 
     const [ isGoalCompleted, setIsGoalCompleted ] = useState(false)
 
-    const handleSaveGoal = () => {
-        setStore(goals)
-    }
+    const token = getAuthToken()
     
     const updateGoalIsCompleted = () => {
         if (goal.tasks.length < 1) return setIsGoalCompleted(false)
@@ -38,6 +39,12 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
         return setIsGoalCompleted(true)
     }
 
+    const handleSaveGoalTitle = () => {
+        setStore(goals)
+        replaceGoalTitle(goal.id, goal.title)
+        return
+    }
+
     const handleChangeGoalTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         return goal.title = event.currentTarget.value
     }
@@ -46,6 +53,15 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
         goals = goals.filter(goalItem => goalItem.id !== goal.id)
         setGoals(goals)
         setStore(goals)
+
+        if (token) {
+            const decodedToken = jwtDecode<CustomJwtPayload>(token)
+            const userId = decodedToken.id
+
+            if (!userId) return
+
+            deleteGoal(goal.id, token)
+        }
     }
 
     const handleAddTask = () => {
@@ -68,7 +84,7 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
                     <img className="mt-0.5 size-4" src={CircleCheck} alt="circle-check" />
                 }
                 <textarea 
-                    onBlur={handleSaveGoal}
+                    onBlur={handleSaveGoalTitle}
                     onChange={handleChangeGoalTitle}
                     defaultValue={goal.title}
                     rows={1}

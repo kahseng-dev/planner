@@ -49,10 +49,8 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
         }
     }
     
-    const handleAddGoal = (date:DateTime) => {
+    const handleAddGoal = async (date:DateTime) => {
         let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
-        setGoals([...goals, goal])
-        setStore([...goals, goal])
 
         if (token) {
             const decodedToken = jwtDecode<CustomJwtPayload>(token)
@@ -60,9 +58,11 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
             if (!userId) return
 
-            addGoal(userId, goal.title)
+            goal = await addGoal(userId, goal.title)
         }
         
+        setGoals([...goals, goal])
+        setStore([...goals, goal])
         return 
     }
 

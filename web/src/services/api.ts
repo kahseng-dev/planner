@@ -76,9 +76,41 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
 }
 
 export const addGoal = async (userId:string, title:string) => {
-  await request("POST", 
+  let data:GoalAPI = await request("POST", 
                 "/goals/create",
-                { userId: userId, title: title})
+                { userId: userId, title: title })
+                .then(response => {
+                  return response.data
+                })
+                .catch(error => {
+                  errorLog(error)
+                })
+
+  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: data.tasks }
+
+  return goal
+}
+
+export const replaceGoalTitle = async (id:number, title:string) => {
+  let data:GoalAPI = await request("PUT", 
+                "/goals/replace",
+                { id: id, title: title })
+                .then(response => {
+                  return response.data
+                })
+                .catch(error => {
+                  errorLog(error)
+                })
+
+  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: data.tasks }
+
+  return goal
+}
+
+export const deleteGoal = async (id:number, userId:string) => {
+  await request("DELETE", 
+                "/goals/delete",
+                { id: id, userId: userId })
                 .catch(error => {
                   errorLog(error)
                 })
