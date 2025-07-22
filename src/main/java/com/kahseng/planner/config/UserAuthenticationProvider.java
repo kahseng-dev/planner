@@ -34,19 +34,25 @@ public class UserAuthenticationProvider {
     }
 
     public String createToken(String email) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + 3_600_000);
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
+        UserDto user = userService.findByEmail(email);
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 3600000);
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withSubject(email)
+                .withSubject(user.getEmail())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withClaim("id", user.getId())
                 .sign(algorithm);
     }
 
     public Authentication validateToken(String token) {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey)).build();
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
 
         DecodedJWT decoded = verifier.verify(token);
 

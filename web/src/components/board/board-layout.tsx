@@ -1,13 +1,16 @@
 import { DateTime } from "luxon"
 import { useEffect, useState } from "react"
+import { jwtDecode } from "jwt-decode"
 
 import Tag from "@components/tag"
 import Button from "@components/button"
 import GoalList from "@components/goal-list"
 import Plus from "@assets/icons/plus.svg"
+import { setStore, getStore } from "@/services/store"
+import { getAuthToken, request, errorLog } from "@/services/api"
 
 import type { Goal } from "@/types/Goal"
-import { setStore, getStore } from "@/services/store"
+import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
 
 interface BoardLayoutProps {
     timeline:string,
@@ -15,7 +18,7 @@ interface BoardLayoutProps {
 }
 
 const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
-    
+
     const [ goals, setGoals ] = useState<Goal[]>([])
 
     const today = DateTime.local()
@@ -49,14 +52,38 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
         let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
         setGoals([...goals, goal])
         setStore([...goals, goal])
+
         return 
     }
 
     useEffect(() => {
+        let token = getAuthToken()
+
+        if (token) {
+            const decodedToken = jwtDecode<CustomJwtPayload>(token)
+            let userId = decodedToken.id
+
+            if (userId) {
+                request(
+                    "GET", 
+                    "/goals/user?id=" + userId, 
+                    { })
+                    .then(response => {
+                        let data = response.data
+                        setGoals(data)
+                    })
+                    .catch(error => {
+                        errorLog(error)
+                    })
+            }
+
+            return
+        }
+
         let data = getStore()
 
         if (data) {
-            setGoals(data)
+            return setGoals(data)
         }
     }, [])
 

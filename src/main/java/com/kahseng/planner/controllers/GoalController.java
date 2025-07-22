@@ -3,11 +3,13 @@ package com.kahseng.planner.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,18 +24,18 @@ public class GoalController {
     @Autowired
     private GoalService goalService;
 
-    @GetMapping
-    public List<Goal> getGoalsByUserId(@RequestParam String userId) {
-        return goalService.getGoalsByUserId(userId);
+    @GetMapping("/user")
+    public ResponseEntity<List<Goal>> getGoalsByUserId(@RequestParam String id) {
+        return ResponseEntity.ok(goalService.getGoalsByUserId(id));
     }
 
     @PostMapping("/create")
-    public void createGoal(@RequestParam String title, @RequestParam String userId) {
+    public void createGoal(@RequestBody String title, @RequestBody String userId) {
         goalService.createGoal(title, userId);
     }
 
     @DeleteMapping("/delete")
-    public void deleteGoal(@RequestParam Long id, @RequestParam String userId) {
+    public void deleteGoal(@RequestBody Long id, @RequestBody String userId) {
         goalService.deleteGoal(id, userId);
     }
 

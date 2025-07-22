@@ -4,7 +4,7 @@ const SERVER_PORT = 8081
 const API_URL = `http://localhost:${SERVER_PORT}/api`
 
 axios.defaults.baseURL = API_URL
-axios.defaults.headers.post['Content-Type'] = "application/json"
+axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 export const getAuthToken = () => {
   return window.localStorage.getItem("auth_token")
@@ -18,38 +18,33 @@ export const removeAuthToken = () => {
   return window.localStorage.removeItem("auth_token")
 }
 
-export const request = (method:string, url:string, data:any) => {
+export const request = (method:string, url:string, data:any):Promise<any> => {
   let token = getAuthToken()
   let headers = {}
 
   if (token) {
-    headers = {"Authorization" : `Bearer ${token}`}
+    headers = {"Authorization": "Bearer " + token}
   }
 
   return axios({
     method: method, 
-    headers: headers,
     url: url,
     data: data,
+    headers: headers,
   })
 }
 
 export const errorLog = (error:any) => {
 
   if (error.response) {
-    console.log(error.response.data)
-    console.log(error.response.status)
-    console.log(error.response.headers)
+    console.error(error.response.data)
+    console.error(error.response.status)
+    return
   } 
 
   else if (error.request) {
-    console.log(error.request)
+    return console.error(error.request)
   }
 
-  else {
-    console.log('Error', error.message)
-  }
-
-  console.log(error.config)
-  
+  return console.error('Error', error.message)
 }
