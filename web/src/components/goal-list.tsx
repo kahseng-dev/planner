@@ -23,6 +23,10 @@ interface GoalListProps {
 const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
 
     const [ isGoalCompleted, setIsGoalCompleted ] = useState(false)
+
+    const handleSaveGoal = () => {
+        setStore(goals)
+    }
     
     const updateGoalIsCompleted = () => {
         if (goal.tasks.length < 1) return setIsGoalCompleted(false)
@@ -35,8 +39,7 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
     }
 
     const handleChangeGoalTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        goal.title = event.currentTarget.value
-        setStore(goals)
+        return goal.title = event.currentTarget.value
     }
 
     const handleDeleteGoal = () => {
@@ -65,6 +68,7 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
                     <img className="mt-0.5 size-4" src={CircleCheck} alt="circle-check" />
                 }
                 <textarea 
+                    onBlur={handleSaveGoal}
                     onChange={handleChangeGoalTitle}
                     defaultValue={goal.title}
                     rows={1}

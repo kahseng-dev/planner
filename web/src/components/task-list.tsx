@@ -14,21 +14,20 @@ interface TaskListProps {
 
 const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
 
-    const handleChangeTaskText = (event: ChangeEvent<HTMLTextAreaElement>) => {
-
-        task.text = event.currentTarget.value
-        
-        goal.tasks.map(taskItem => {
-            if (taskItem.id !== task.id) return { ...taskItem }
-            return { ...taskItem, task }
-        })
-
+    const handleSaveTask = () => {
         setGoals([...goals])
         setStore([...goals])
     }
 
-    const handleToggleTask = () => {
+    const handleChangeTaskText = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        task.text = event.currentTarget.value
+        return goal.tasks.map(taskItem => {
+            if (taskItem.id !== task.id) return { ...taskItem }
+            return { ...taskItem, task }
+        })
+    }
 
+    const handleToggleTask = () => {
         task.isCompleted = !task.isCompleted
 
         goal.tasks.map(taskItem => {
@@ -36,14 +35,12 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
             return { ...taskItem, task }
         })
 
-        setGoals([...goals])
-        setStore([...goals])
+        return handleSaveTask()
     }
 
     const handleDeleteTask = () => {
         goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
-        setGoals([...goals])
-        setStore([...goals])
+        return handleSaveTask()
     }
 
     return (
@@ -54,8 +51,9 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
                 checked={task.isCompleted}
                 className="cursor-pointer" />
             <textarea 
+                onBlur={handleSaveTask}
                 onChange={handleChangeTaskText}
-                value={task.text}
+                defaultValue={task.text}
                 rows={1}
                 className={`${task.isCompleted && "line-through"} py-1 px-2 w-full field-sizing-content resize-none outline-0 break-all text-neutral-500 rounded transition duration-300 hover:bg-gray-100`} />
             <button 
