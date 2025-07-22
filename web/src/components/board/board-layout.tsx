@@ -7,7 +7,7 @@ import Button from "@components/button"
 import GoalList from "@components/goal-list"
 import Plus from "@assets/icons/plus.svg"
 import { setStore, getStore } from "@/services/store"
-import { getAuthToken, request, errorLog } from "@/services/api"
+import { getAuthToken, getGoals } from "@/services/api"
 
 import type { Goal } from "@/types/Goal"
 import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
@@ -63,28 +63,13 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
             const decodedToken = jwtDecode<CustomJwtPayload>(token)
             let userId = decodedToken.id
 
-            if (userId) {
-                request(
-                    "GET", 
-                    "/goals/user?id=" + userId, 
-                    { })
-                    .then(response => {
-                        let data = response.data
-                        setGoals(data)
-                    })
-                    .catch(error => {
-                        errorLog(error)
-                    })
-            }
-
-            return
+            if (!userId) return
+            
+            getGoals(userId).then(setGoals)
         }
 
         let data = getStore()
-
-        if (data) {
-            return setGoals(data)
-        }
+        if (data) return setGoals(data)
     }, [])
 
     return <> 

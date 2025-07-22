@@ -1,10 +1,18 @@
 import axios from "axios";
+import type { Goal } from "@/types/Goal"
 
 const SERVER_PORT = 8081
 const API_URL = `http://localhost:${SERVER_PORT}/api`
 
 axios.defaults.baseURL = API_URL
 axios.defaults.headers.post['Content-Type'] = 'application/json'
+
+interface GoalAPI {
+  date:string,
+  id:number,
+  title:string,
+  tasks:[],
+}
 
 export const getAuthToken = () => {
   return window.localStorage.getItem("auth_token")
@@ -47,4 +55,22 @@ export const errorLog = (error:any) => {
   }
 
   return console.error('Error', error.message)
+}
+
+export const getGoals = async (userId:string):Promise<Goal[]> => {
+  let data:GoalAPI[] = await request("GET", "/goals/user?id=" + userId, { })
+                    .then(response => {
+                      return response.data
+                    })
+                    .catch(error => {
+                        errorLog(error)
+                    })
+
+  let goals:Goal[] = []
+
+  goals = data.map(item => {
+    return { id: item.id, title: item.title, date: new Date(item.date), tasks: item.tasks }
+  })
+
+  return goals
 }

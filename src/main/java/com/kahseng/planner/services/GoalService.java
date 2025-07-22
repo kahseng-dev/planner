@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kahseng.planner.dtos.GoalDto;
 import com.kahseng.planner.models.Goal;
 import com.kahseng.planner.models.User;
 import com.kahseng.planner.repositories.GoalRepository;
@@ -16,14 +17,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GoalService {
 
-    private GoalRepository goalRepository;
-    private UserRepository userRepository;
+    private final GoalRepository goalRepository;
 
-    public List<Goal> getGoalsByUserId(String userId) {
-        return goalRepository.findByUserId(userId);
+    private final UserRepository userRepository;
+
+    private final GoalMapper goalMapper;
+
+    public List<GoalDto> getGoalsByUserId(String userId) {
+        List<Goal> goals = goalRepository.findByUserId(userId);
+
+        return goals.stream().map(goalMapper::toGoalDto).toList();
     }
 
-    public void createGoal(String title, String userId) {
+    public GoalDto createGoal(String userId, String title) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -35,19 +42,24 @@ public class GoalService {
         goal.setUser(user);
 
         goalRepository.save(goal);
+
+        return goalMapper.toGoalDto(goal);
     }
 
     public void deleteGoal(Long id, String userId) {
         goalRepository.deleteByIdAndUserId(id, userId);
     }
 
-    public boolean replaceGoalTitle(Long id, String newTitle) {
+    public GoalDto replaceGoalTitle(Long id, String newTitle) {
+
         Goal goal = goalRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Goal not found"));
         
         goal.setTitle(newTitle);
+
         goalRepository.save(goal);
 
-        return true;
+        return goalMapper.toGoalDto(goal);
     }
+    
 }
