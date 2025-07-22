@@ -14,6 +14,10 @@ export const setAuthToken = (token:string) => {
   return window.localStorage.setItem("auth_token", token)
 }
 
+export const removeAuthToken = () => {
+  return window.localStorage.removeItem("auth_token")
+}
+
 export const request = (method:string, url:string, data:any) => {
   let token = getAuthToken()
   let headers = {}
