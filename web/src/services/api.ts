@@ -63,7 +63,7 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
                       return response.data
                     })
                     .catch(error => {
-                        errorLog(error)
+                      errorLog(error)
                     })
 
   let goals:Goal[] = []
@@ -73,4 +73,13 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
   })
 
   return goals
+}
+
+export const addGoal = async (userId:string, title:string) => {
+  await request("POST", 
+                "/goals/create",
+                { userId: userId, title: title})
+                .catch(error => {
+                  errorLog(error)
+                })
 }

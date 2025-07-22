@@ -7,7 +7,7 @@ import Button from "@components/button"
 import GoalList from "@components/goal-list"
 import Plus from "@assets/icons/plus.svg"
 import { setStore, getStore } from "@/services/store"
-import { getAuthToken, getGoals } from "@/services/api"
+import { getAuthToken, getGoals, addGoal } from "@/services/api"
 
 import type { Goal } from "@/types/Goal"
 import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
@@ -21,6 +21,7 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
     const [ goals, setGoals ] = useState<Goal[]>([])
 
+    const token = getAuthToken()
     const today = DateTime.local()
 
     const loadHeaders = (day:DateTime<true> | null) => {
@@ -53,15 +54,22 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
         setGoals([...goals, goal])
         setStore([...goals, goal])
 
+        if (token) {
+            const decodedToken = jwtDecode<CustomJwtPayload>(token)
+            const userId = decodedToken.id
+
+            if (!userId) return
+
+            addGoal(userId, goal.title)
+        }
+        
         return 
     }
 
     useEffect(() => {
-        let token = getAuthToken()
-
         if (token) {
             const decodedToken = jwtDecode<CustomJwtPayload>(token)
-            let userId = decodedToken.id
+            const userId = decodedToken.id
 
             if (!userId) return
             
