@@ -17,3 +17,7 @@ export const getStore = () => {
 export const setStore = (data:Goal[]) => {
     return window.localStorage.setItem(key, JSON.stringify(data))
 }
+
+export const removeStore = () => {
+    return window.localStorage.removeItem(key)
+}

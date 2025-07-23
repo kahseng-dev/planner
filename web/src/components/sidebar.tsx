@@ -7,6 +7,7 @@ import GithubIcon from "@assets/icons/github.svg"
 import BoardIcon from "@assets/icons/home.svg"
 import LogoutIcon from "@assets/icons/logout.svg"
 import { getAuthToken, removeAuthToken } from "@/services/api"
+import { removeStore } from "@/services/store"
 
 interface SidebarProps {
     isOpen:boolean,
@@ -21,6 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
 
     const handleLogout = () => {
         removeAuthToken()
+        removeStore()
         return navigate("/")
     }
 
