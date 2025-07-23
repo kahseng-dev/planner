@@ -9,4 +9,6 @@ public class TaskDto {
     
     private String text;
 
+    private boolean isCompleted;
+
 }

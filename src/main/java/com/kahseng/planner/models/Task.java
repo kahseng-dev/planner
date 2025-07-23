@@ -17,6 +17,7 @@ public class Task {
     private Long id;
     
     private String text;
+    
     private boolean isCompleted;
 
     @ManyToOne

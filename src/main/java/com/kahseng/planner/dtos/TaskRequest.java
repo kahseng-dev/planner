@@ -11,4 +11,6 @@ public class TaskRequest {
     
     private String text;
 
+    private boolean isCompleted;
+
 }
