@@ -15,7 +15,7 @@ import type { Task } from "@/types/Task"
 import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
 
 import { setStore } from "@/services/store"
-import { getAuthToken, replaceGoalTitle, deleteGoal } from "@/services/api"
+import { getAuthToken, createTask, replaceGoalTitle, deleteGoal } from "@/services/api"
 
 interface GoalListProps {
     goal:Goal,
@@ -64,9 +64,15 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
         }
     }
 
-    const handleAddTask = () => {
-        const task:Task = { id:goal.tasks.length + 1, text:"", isCompleted:false, }
+    const handleCreateTask = async () => {
+        let task:Task = { id:goal.tasks.length + 1, text:"", isCompleted:false, }
+
+        if (token) {
+            task = await createTask(goal.id)
+        }
+
         goal.tasks.push(task)
+
         setGoals([...goals])
         setStore([...goals])
     }
@@ -105,7 +111,7 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
                         setGoals={setGoals} />
                 )}
                 <Button 
-                    onClick={handleAddTask}
+                    onClick={handleCreateTask}
                     className="opacity-0 group-hover/task:opacity-100 w-full flex items-center gap-2">
                     <img className="size-4" src={Plus} alt="plus" />
                     Add task

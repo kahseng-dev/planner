@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Goal } from "@/types/Goal"
+import type { Task } from "@/types/Task";
 
 const SERVER_PORT = 8081
 const API_URL = `http://localhost:${SERVER_PORT}/api`
@@ -12,6 +13,12 @@ interface GoalAPI {
   id:number,
   title:string,
   tasks:[],
+}
+
+interface TaskAPI {
+  id:number,
+  text:string,
+  isCompleted:boolean,
 }
 
 export const getAuthToken = () => {
@@ -75,7 +82,7 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
   return goals
 }
 
-export const addGoal = async (userId:string, title:string) => {
+export const createGoal = async (userId:string, title:string) => {
   let data:GoalAPI = await request("POST", 
                 "/goals/create",
                 { userId: userId, title: title })
@@ -114,4 +121,79 @@ export const deleteGoal = async (id:number, userId:string) => {
                 .catch(error => {
                   errorLog(error)
                 })
+}
+
+export const getTasks = async (goalId:string):Promise<Task[]> => {
+  let data:TaskAPI[] = await request("GET", "/tasks/goal?id=" + goalId, { })
+                    .then(response => {
+                      return response.data
+                    })
+                    .catch(error => {
+                      errorLog(error)
+                    })
+
+  let tasks:Task[] = []
+
+  tasks = data.map(item => {
+    return { id: item.id, text: item.text, isCompleted: item.isCompleted }
+  })
+
+  return tasks
+}
+
+export const createTask = async (goalId:number) => {
+    let data:TaskAPI = await request("POST", 
+                "/tasks/create",
+                { goalId: goalId })
+                .then(response => {
+                  return response.data
+                })
+                .catch(error => {
+                  errorLog(error)
+                })
+
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+
+  return task
+}
+
+export const toggleTask = async (id:number) => {
+    let data:TaskAPI = await request("PUT", 
+                "/tasks/toggle",
+                { id: id })
+                .then(response => {
+                  return response.data
+                })
+                .catch(error => {
+                  errorLog(error)
+                })
+
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+
+  return task
+}
+
+export const replaceTaskText = async (id:number, text:string) => {
+    let data:TaskAPI = await request("PUT", 
+                "/tasks/replace",
+                { id: id, text: text })
+                .then(response => {
+                  return response.data
+                })
+                .catch(error => {
+                  errorLog(error)
+                })
+
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+
+  return task
+}
+
+export const deleteTask = async (id:number) => {
+  await request("DELETE", 
+              "/tasks/delete",
+              { id: id })
+              .catch(error => {
+                errorLog(error)
+              })
 }

@@ -1,9 +1,12 @@
 import type { ChangeEvent, Dispatch, SetStateAction } from "react"
 
+import X from "@assets/icons/x.svg"
+
 import type { Task } from "@/types/Task"
 import type { Goal } from "@/types/Goal"
-import X from "@assets/icons/x.svg"
+
 import { setStore } from "@/services/store"
+import { getAuthToken, toggleTask, replaceTaskText, deleteTask } from "@/services/api"
 
 interface TaskListProps {
     task:Task,
@@ -14,7 +17,14 @@ interface TaskListProps {
 
 const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
 
-    const handleSaveTask = () => {
+    const token = getAuthToken()
+
+    const handleSaveTaskText = () => {
+
+        if (token) {
+            replaceTaskText(task.id, task.text)
+        }
+
         setGoals([...goals])
         setStore([...goals])
     }
@@ -35,12 +45,23 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
             return { ...taskItem, task }
         })
 
-        return handleSaveTask()
+        if (token) {
+            toggleTask(task.id)
+        }
+        
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     const handleDeleteTask = () => {
         goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
-        return handleSaveTask()
+
+        if (token) {
+            deleteTask(task.id)
+        }
+
+        setGoals([...goals])
+        setStore([...goals])
     }
 
     return (
@@ -51,7 +72,7 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
                 checked={task.isCompleted}
                 className="cursor-pointer" />
             <textarea 
-                onBlur={handleSaveTask}
+                onBlur={handleSaveTaskText}
                 onChange={handleChangeTaskText}
                 defaultValue={task.text}
                 rows={1}

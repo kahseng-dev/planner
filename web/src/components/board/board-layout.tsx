@@ -7,7 +7,7 @@ import Button from "@components/button"
 import GoalList from "@components/goal-list"
 import Plus from "@assets/icons/plus.svg"
 import { setStore, getStore } from "@/services/store"
-import { getAuthToken, getGoals, addGoal } from "@/services/api"
+import { getAuthToken, getGoals, createGoal } from "@/services/api"
 
 import type { Goal } from "@/types/Goal"
 import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
@@ -49,7 +49,7 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
         }
     }
     
-    const handleAddGoal = async (date:DateTime) => {
+    const handleCreateGoal = async (date:DateTime) => {
         let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
 
         if (token) {
@@ -58,7 +58,7 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
             if (!userId) return
 
-            goal = await addGoal(userId, goal.title)
+            goal = await createGoal(userId, goal.title)
         }
         
         setGoals([...goals, goal])
@@ -121,7 +121,7 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
                         }
                     })}
                     <Button 
-                        onClick={() => handleAddGoal(day!)}
+                        onClick={() => handleCreateGoal(day!)}
                         className="opacity-0 group-hover/goal:opacity-100 w-full flex items-center gap-2">
                         <img className="size-4" src={Plus} alt="plus" />
                         Add goal
