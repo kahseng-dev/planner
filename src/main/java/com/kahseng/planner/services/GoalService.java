@@ -46,10 +46,6 @@ public class GoalService {
         return goalMapper.toGoalDto(goal);
     }
 
-    public void deleteGoal(Long id, String userId) {
-        goalRepository.deleteByIdAndUserId(id, userId);
-    }
-
     public GoalDto replaceGoalTitle(Long id, String newTitle) {
 
         Goal goal = goalRepository.findById(id)
@@ -62,4 +58,8 @@ public class GoalService {
         return goalMapper.toGoalDto(goal);
     }
     
+    public void deleteGoal(Long id, String userId) {
+        goalRepository.deleteByIdAndUserId(id, userId);
+    }
+
 }
