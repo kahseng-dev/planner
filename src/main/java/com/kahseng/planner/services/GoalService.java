@@ -21,6 +21,8 @@ public class GoalService {
 
     private final UserRepository userRepository;
 
+    private final TaskService taskService;
+
     private final GoalMapper goalMapper;
 
     public List<GoalDto> getGoalsByUserId(String userId) {
@@ -60,6 +62,8 @@ public class GoalService {
     public void deleteGoal(Long id) {
         Goal goal = goalRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Goal not found"));
+        
+        taskService.deleteTasksByGoalId(id);
 
         goalRepository.delete(goal);
     }

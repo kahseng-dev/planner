@@ -70,7 +70,16 @@ public class TaskService {
     }
 
     public void deleteTask(Long id) {
-        taskRepository.deleteById(id);
+        Task task = taskRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Task Id"));
+
+        taskRepository.delete(task);
+    }
+
+    public void deleteTasksByGoalId(Long goalId) {
+        List<Task> tasks = taskRepository.findByGoalId(goalId);
+
+        taskRepository.deleteAll(tasks);
     }
 
 }

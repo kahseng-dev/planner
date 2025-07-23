@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { jwtDecode } from "jwt-decode"
 import type { Dispatch, SetStateAction } from "react"
 
 import CircleCheck from "@assets/icons/circle-check.svg"
@@ -12,7 +11,6 @@ import TaskList from "@components/task-list"
 
 import type { Goal } from "@/types/Goal"
 import type { Task } from "@/types/Task"
-import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
 
 import { setStore } from "@/services/store"
 import { getAuthToken, createTask, replaceGoalTitle, deleteGoal } from "@/services/api"

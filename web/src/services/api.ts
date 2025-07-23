@@ -19,7 +19,7 @@ interface GoalAPI {
 interface TaskAPI {
   id:number,
   text:string,
-  isCompleted:boolean,
+  completed:boolean,
 }
 
 export const getAuthToken = () => {
@@ -77,7 +77,13 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
   let goals:Goal[] = []
 
   goals = data.map(item => {
-    return { id: item.id, title: item.title, date: new Date(item.date), tasks: item.tasks }
+    let tasks:Task[] = []
+
+    tasks = item.tasks.map(task => {
+      return { id: task.id, text: task.text, isCompleted: task.completed }
+    })
+
+    return { id: item.id, title: item.title, date: new Date(item.date), tasks: tasks }
   })
 
   return goals
@@ -93,8 +99,14 @@ export const createGoal = async (userId:string, date:string) => {
                 .catch(error => {
                   errorLog(error)
                 })
+  
+  let tasks:Task[] = []
 
-  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: data.tasks }
+  tasks = data.tasks.map(task => {
+    return { id: task.id, text: task.text, isCompleted: task.completed }
+  })
+
+  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: tasks }
 
   return goal
 }
@@ -110,7 +122,13 @@ export const replaceGoalTitle = async (id:number, title:string) => {
                   errorLog(error)
                 })
 
-  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: data.tasks }
+  let tasks:Task[] = []
+
+  tasks = data.tasks.map(task => {
+    return { id: task.id, text: task.text, isCompleted: task.completed }
+  })
+
+  let goal:Goal = { id: data.id, title: data.title, date: new Date(data.date), tasks: tasks }
 
   return goal
 }
@@ -136,7 +154,7 @@ export const getTasks = async (goalId:string):Promise<Task[]> => {
   let tasks:Task[] = []
 
   tasks = data.map(item => {
-    return { id: item.id, text: item.text, isCompleted: item.isCompleted }
+    return { id: item.id, text: item.text, isCompleted: item.completed }
   })
 
   return tasks
@@ -153,7 +171,7 @@ export const createTask = async (goalId:number) => {
                   errorLog(error)
                 })
 
-  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.completed }
 
   return task
 }
@@ -169,7 +187,7 @@ export const toggleTask = async (id:number) => {
                   errorLog(error)
                 })
 
-  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.completed }
 
   return task
 }
@@ -185,7 +203,7 @@ export const replaceTaskText = async (id:number, text:string) => {
                   errorLog(error)
                 })
 
-  let task:Task = { id: data.id, text: data.text, isCompleted: data.isCompleted }
+  let task:Task = { id: data.id, text: data.text, isCompleted: data.completed }
 
   return task
 }

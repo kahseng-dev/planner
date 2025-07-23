@@ -19,10 +19,10 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
 
     const token = getAuthToken()
 
-    const handleSaveTaskText = () => {
+    const handleSaveTaskText = async () => {
 
         if (token) {
-            replaceTaskText(task.id, task.text)
+            task = await replaceTaskText(task.id, task.text)
         }
 
         setGoals([...goals])
@@ -37,23 +37,23 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
         })
     }
 
-    const handleToggleTask = () => {
+    const handleToggleTask = async () => {
         task.isCompleted = !task.isCompleted
+
+        if (token) {
+            task = await toggleTask(task.id)
+        }
 
         goal.tasks.map(taskItem => {
             if (taskItem.id !== task.id) return { ...taskItem }
             return { ...taskItem, task }
         })
-
-        if (token) {
-            toggleTask(task.id)
-        }
         
         setGoals([...goals])
         setStore([...goals])
     }
 
-    const handleDeleteTask = () => {
+    const handleDeleteTask = async () => {
         goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
 
         if (token) {
