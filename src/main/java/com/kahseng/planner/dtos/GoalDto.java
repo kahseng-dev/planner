@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kahseng.planner.models.Task;
-
 import lombok.Data;
 
 @Data
@@ -17,6 +15,6 @@ public class GoalDto {
     
     private LocalDateTime date;
 
-    private List<Task> tasks = new ArrayList<>();
+    private List<TaskDto> tasks = new ArrayList<>();
 
 }

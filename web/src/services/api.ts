@@ -13,7 +13,7 @@ interface GoalAPI {
   date:string,
   id:number,
   title:string,
-  tasks:[],
+  tasks:TaskAPI[],
 }
 
 interface TaskAPI {
