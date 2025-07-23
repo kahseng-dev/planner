@@ -40,9 +40,12 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
     }
 
     const handleSaveGoalTitle = () => {
+
+        if (token) {
+            replaceGoalTitle(goal.id, goal.title)
+        }
+        
         setStore(goals)
-        replaceGoalTitle(goal.id, goal.title)
-        return
     }
 
     const handleChangeGoalTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -51,17 +54,13 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
 
     const handleDeleteGoal = () => {
         goals = goals.filter(goalItem => goalItem.id !== goal.id)
-        setGoals(goals)
-        setStore(goals)
 
         if (token) {
-            const decodedToken = jwtDecode<CustomJwtPayload>(token)
-            const userId = decodedToken.id
-
-            if (!userId) return
-
-            deleteGoal(goal.id, token)
+            deleteGoal(goal.id)
         }
+
+        setGoals(goals)
+        setStore(goals)
     }
 
     const handleCreateTask = async () => {

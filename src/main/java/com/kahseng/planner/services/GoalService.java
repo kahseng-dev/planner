@@ -57,8 +57,11 @@ public class GoalService {
         return goalMapper.toGoalDto(goal);
     }
     
-    public void deleteGoal(Long id, String userId) {
-        goalRepository.deleteByIdAndUserId(id, userId);
+    public void deleteGoal(Long id) {
+        Goal goal = goalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Goal not found"));
+
+        goalRepository.delete(goal);
     }
 
 }

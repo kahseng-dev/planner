@@ -41,6 +41,7 @@ public class GoalController {
 
     @DeleteMapping("/delete")
     public void deleteGoal(@RequestBody GoalRequest request) {
-        goalService.deleteGoal(request.getId(), request.getUserId());
+        goalService.deleteGoal(request.getId());
     }
+
 }

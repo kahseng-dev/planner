@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import type { Goal } from "@/types/Goal"
 import type { Task } from "@/types/Task";
 
@@ -114,10 +115,10 @@ export const replaceGoalTitle = async (id:number, title:string) => {
   return goal
 }
 
-export const deleteGoal = async (id:number, userId:string) => {
+export const deleteGoal = async (id:number) => {
   await request("DELETE", 
                 "/goals/delete",
-                { id: id, userId: userId })
+                { id: id })
                 .catch(error => {
                   errorLog(error)
                 })
