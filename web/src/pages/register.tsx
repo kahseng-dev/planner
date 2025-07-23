@@ -1,9 +1,12 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { jwtDecode } from "jwt-decode"
 import type { ChangeEvent, FormEvent } from "react"
 
 import Button from "@components/button"
-import { request, errorLog, setAuthToken } from "@/services/api"
+import { request, errorLog, setAuthToken, createGoal } from "@/services/api"
+import { getStore } from "@/services/store"
+import type { CustomJwtPayload } from "@/types/CustomJwtPayload"
 
 const Register = () => {
 
@@ -12,6 +15,7 @@ const Register = () => {
     const [ error, setError ] = useState<string | null>(null)
 
     const navigate = useNavigate()
+    const store = getStore()
 
     const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [event.target?.name]: event.target?.value, })
@@ -26,8 +30,22 @@ const Register = () => {
         request("POST", 
                 "/users/register", 
                 { name: form.name, email: form.email, password: form.password })
-                .then(response => {
-                    setAuthToken(response.data.token)
+                .then((response) => {
+                    
+                    const token = response.data.token
+                    const decodedToken = jwtDecode<CustomJwtPayload>(token)
+                    const userId = decodedToken.id
+
+                    setAuthToken(token)
+                    
+                    if (store) {
+                        if (userId) {
+                            store.map(goal => {
+                                createGoal(userId, goal.date.toISOString())
+                            })
+                        }
+                    }
+                    
                     setIsLoading(false)
                     navigate("/board")
                 })
@@ -113,7 +131,7 @@ const Register = () => {
                     onClick={() => navigate("/")}
                     disabled={isLoading}
                     className="ml-2 cursor-pointer text-black">
-                    Sign Up
+                    Sign In
                 </button>
             </span>
         </div>
