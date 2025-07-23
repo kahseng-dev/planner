@@ -82,10 +82,10 @@ export const getGoals = async (userId:string):Promise<Goal[]> => {
   return goals
 }
 
-export const createGoal = async (userId:string, title:string) => {
+export const createGoal = async (userId:string, date:string) => {
   let data:GoalAPI = await request("POST", 
                 "/goals/create",
-                { userId: userId, title: title })
+                { userId: userId, date: date })
                 .then(response => {
                   return response.data
                 })

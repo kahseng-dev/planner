@@ -29,15 +29,14 @@ public class GoalService {
         return goals.stream().map(goalMapper::toGoalDto).toList();
     }
 
-    public GoalDto createGoal(String userId, String title) {
+    public GoalDto createGoal(String userId, LocalDateTime date) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Goal goal = new Goal();
-        LocalDateTime date = LocalDateTime.now();
         
-        goal.setTitle(title);
+        goal.setTitle("");
         goal.setDate(date);
         goal.setUser(user);
 

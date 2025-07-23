@@ -58,12 +58,11 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
             if (!userId) return
 
-            goal = await createGoal(userId, goal.title)
+            goal = await createGoal(userId, goal.date.toISOString())
         }
         
         setGoals([...goals, goal])
         setStore([...goals, goal])
-        return 
     }
 
     useEffect(() => {

@@ -31,7 +31,7 @@ public class GoalController {
 
     @PostMapping("/create")
     public ResponseEntity<GoalDto> createGoal(@RequestBody GoalRequest request) {
-        return ResponseEntity.ok(goalService.createGoal(request.getUserId(), request.getTitle()));
+        return ResponseEntity.ok(goalService.createGoal(request.getUserId(), request.getDate()));
     }
 
     @PutMapping("/replace")
