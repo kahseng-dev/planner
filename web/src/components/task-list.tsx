@@ -54,12 +54,12 @@ const TaskList = ({ task, goal, goals, setGoals }:TaskListProps) => {
     }
 
     const handleDeleteTask = async () => {
-        goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
-
         if (token) {
             deleteTask(task.id)
         }
-
+        
+        goal.tasks = goal.tasks.filter(taskItem => taskItem.id !== task.id)
+        
         setGoals([...goals])
         setStore([...goals])
     }

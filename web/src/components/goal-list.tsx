@@ -24,6 +24,7 @@ interface GoalListProps {
 const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
 
     const [ isGoalCompleted, setIsGoalCompleted ] = useState(false)
+    const [ count, setCount ] = useState(0)
 
     const token = getAuthToken()
     
@@ -62,7 +63,8 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
     }
 
     const handleCreateTask = async () => {
-        let task:Task = { id:goal.tasks.length + 1, text:"", isCompleted:false, }
+        let task:Task = { id: count, text:"", isCompleted:false, }
+        setCount(count + 1)
 
         if (token) {
             task = await createTask(goal.id)
@@ -99,9 +101,9 @@ const GoalList = ({ goal, goals, setGoals }:GoalListProps) => {
                 </button>
             </div>
             <div className="group/task pl-5 w-full flex flex-col gap-2">
-                { goal.tasks.map((task, index) => 
+                { goal.tasks.map(task => 
                     <TaskList 
-                        key={index} 
+                        key={task.id} 
                         task={task}
                         goal={goal}
                         goals={goals} 

@@ -20,6 +20,7 @@ interface BoardLayoutProps {
 const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
     const [ goals, setGoals ] = useState<Goal[]>([])
+    const [ count, setCount ] = useState(0)
 
     const token = getAuthToken()
     const today = DateTime.local()
@@ -50,7 +51,8 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
     }
     
     const handleCreateGoal = async (date:DateTime) => {
-        let goal:Goal = { id:goals.length + 1, title:"", date:date.toJSDate(), tasks:[] }
+        let goal:Goal = { id: count, title:"", date:date.toJSDate(), tasks:[] }
+        setCount(count + 1)
 
         if (token) {
             const decodedToken = jwtDecode<CustomJwtPayload>(token)
@@ -88,24 +90,26 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
                     {loadHeaders(day)}
                 </div>
                 <div className="flex flex-col gap-4">
-                    { goals.map((goal, index) => {
+                    { goals.map(goal => {
                         let date = DateTime.fromJSDate(goal.date)
 
                         if (timeline === "Year") {
                             if (day?.year === date.year) {
                                 return <GoalList 
-                                    key={index} 
+                                    key={goal.id} 
                                     goal={goal} 
                                     goals={goals} 
                                     setGoals={setGoals} />
                             }
+                            return
                         }
 
                         if (timeline === "Month") {
+                            
                             if (date.year != day?.year || date.month != day?.month) return
 
                             return <GoalList 
-                                key={index} 
+                                key={goal.id} 
                                 goal={goal} 
                                 goals={goals} 
                                 setGoals={setGoals} />
@@ -113,7 +117,7 @@ const BoardLayout = ({ dateList, timeline }:BoardLayoutProps) => {
 
                         if (date.toISODate() === day?.toISODate()) {
                             return <GoalList 
-                                key={index} 
+                                key={goal.id} 
                                 goal={goal}
                                 goals={goals}
                                 setGoals={setGoals} />
